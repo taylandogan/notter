@@ -13,6 +13,6 @@ setup(
         "dev": ["black", "flake8", "isort", "mypy"],
     },
     entry_points={
-        "console_scripts": ["notter=notter.cli:main"],
+        "console_scripts": ["notter=notter.cli:cli"],
     },
 )
