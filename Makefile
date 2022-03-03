@@ -1,22 +1,21 @@
 PACKAGE_NAME:=notter
 PYTHON:=python3.10
-
-export PYTHONPATH=$(CURDIR)/$(PACKAGE_NAME)
-
+VENV:=./venv
+PIP_VENV:=$(VENV)/bin/pip
 
 .PHONY: venv
 venv:
-	$(PYTHON) -m venv venv
-	pip install -e .
+	$(PYTHON) -m venv $(VENV)
+	$(PIP_VENV) install -e .
 
 .PHONY: venv_dev
 venv_dev:
-	$(PYTHON) -m venv venv
-	pip install -e .[dev]
+	$(PYTHON) -m venv $(VENV)
+	$(PIP_VENV) install -e '.[dev]'
 
 .PHONY: clean
 clean:
-	rm -rf venv
+	rm -rf $(VENV)
 	find $(PACKAGE_NAME) -type d -name __pycache__ -exec rm -r {} \+
 	rm -rf *.egg-info build dist
 	rm -rf '.mypy_cache'
