@@ -1,3 +1,68 @@
+[project]
+name = "notter"
+version = "0.1.0"
+description = "A simple note taking tool for software projects."
+authors = [
+    "Taylan Dogan <taylandogan.nl@gmail.com>"
+]
+license = "MIT"
+readme = "README.md"
+python = "^3.10"
+homepage = "https://github.com/taylandogan/notter"
+repository = "https://github.com/taylandogan/notter"
+documentation = "https://github.com/taylandogan/notter"
+
+keywords = ["notes", "todos", "tracking", "index"]
+
+packages = [
+    { include = "notter" },
+]
+
+# Requirements
+dependencies = [
+    "click",
+    "pygments",
+]
+
+[project.optional-dependencies]
+dev  = [
+    "black",
+    "flake8",
+    "isort",
+    "mypy",
+]
+
+[scripts]
+notter = "notter.cli:cli"
+
 [build-system]
-requires = ["setuptools"]
+requires = [
+    "setuptools",
+    "setuptools_scm",
+    "wheel"
+]
 build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 120
+target_version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
