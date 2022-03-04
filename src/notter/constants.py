@@ -1,0 +1,11 @@
+PATH = "path"
+SRC_PATH = "src_path"
+CONFIG_PATH = "config_path"
+ASSUMPTIONS_PATH = "ass_path"
+NOTES_PATH = "notes_path"
+TODOS_PATH = "todos_path"
+
+CONFIG_FILENAME = "config.json"
+ASSUMPTIONS_DIRNAME = "assumptions"
+NOTES_DIRNAME = "notes"
+TODOS_DIRNAME = "todos"
