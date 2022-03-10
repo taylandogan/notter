@@ -10,7 +10,7 @@ from notter.decorators import persist_after
 class Notter:
     def __init__(self) -> None:
         self.config = {}
-        self.initialized = False
+        self.config["initialized"] = False
 
     @persist_after
     def configure(self, src_folder: Path) -> None:
@@ -24,18 +24,18 @@ class Notter:
         self.init_notter_folders()
 
     def init_notter_folders(self) -> None:
-        if self.initialized:
-            click.secho(f"Notter folders are already initialized at location: {self.path}", fg="red")
+        if self.get_config("initialized"):
+            click.secho(f"Notter folders found at location: {self.path}", fg="red")
         else:
             click.secho(f"Creating Notter folders at location: {self.path}", fg="yellow")
             Path(self.get_config(ncons.PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.ASSUMPTIONS_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.TODOS_PATH)).mkdir(parents=True, exist_ok=True)
-            self.initialized = True
+            self.set_config("initialized", True)
 
     def destroy(self) -> None:
-        if not self.initialized:
+        if not self.get_config("initialized"):
             click.secho("No Notter instance is found, nothing to delete", fg="red")
         else:
             click.echo(f"Deleting: {str(self.path.absolute)}")
@@ -48,8 +48,9 @@ class Notter:
 
     def get_config(self, key: str) -> Any:
         value = self.config.get(key, None)
-        if not value:
+        if value is None:
             click.secho(f"Config `{key}` is not set", fg="red")
+            return None
 
         return value
 
