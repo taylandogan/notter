@@ -70,12 +70,9 @@ def init(notter: Notter, src: str) -> None:
 @click.option("--get", help="get value of a config")
 @click.option("--set", "setc", nargs=2, type=str, help="set a config with a key-value pair")
 @click.option("--all", "allc", is_flag=True, help="show all the config")
-@pass_context
-def config(ctx: Context, get: Optional[str], setc: Optional[Tuple[str, str]], allc: bool) -> None:
+@pass_notter
+def config(notter: Notter, get: Optional[str], setc: Optional[Tuple[str, str]], allc: bool) -> None:
     """Configure Notter configuration."""
-    click.echo(f"CONFIG_PATH: Passed notter obj: {ctx.obj}")
-
-    notter = ctx.obj
     if get:
         value = notter.get_config(get)
         click.echo(value)
