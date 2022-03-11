@@ -51,7 +51,9 @@ class Notter:
         if not self.get_config("initialized"):
             click.secho("No Notter instance is found, nothing to delete", fg="red")
         else:
-            click.echo(f"Deleting: {str(self.path.absolute)}")
+            # TODO: Make sure it is not a critical path
+            notter_path = self.get_config(ncons.PATH)
+            rmtree(notter_path)
             click.secho(f"Notter instance deleted", fg="green")
 
     def repr_config(self) -> str:

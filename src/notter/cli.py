@@ -87,12 +87,12 @@ def config(ctx: Context, get: Optional[str], setc: Optional[Tuple[str, str]], al
 
 
 @cli.command()
-@click.confirmation_option()
 @pass_notter
 @click.pass_context
-def delete(ctx: Context, notter: Notter):
+def destroy(ctx: Context, notter: Notter):
     """Deletes configured Notter instance"""
-    click.echo(f"DELETE: Passed notter obj: {notter}")
+    notter_path = notter.get_config(ncons.PATH)
+    click.confirm(f"Do you really want to delete the Notter instance initialized at `{notter_path}` ?", abort=True)
     notter.destroy()
     ctx.obj = None
 
