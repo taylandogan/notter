@@ -32,7 +32,7 @@ def cli(ctx, init, version) -> None:
     if init:
         # TODO: Do not initialize if the Notter instance is already there
         click.echo(f"Initializing Notter with `{src_path}` as source folder.")
-        notter.configure(Path(src_path))
+        notter.configure(Path(src_path).resolve())
     else:
         notter.load(src_path)
     ctx.obj = notter
