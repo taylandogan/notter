@@ -45,7 +45,7 @@ class Notter:
             quit()
 
         self.config = loaded_config
-        click.secho("Loaded Notter config from file", fg="green")
+        click.secho(f"Loaded Notter config from file: {notter_config_file}", fg="green")
 
     def destroy(self) -> None:
         if not self.get_config("initialized"):
