@@ -4,7 +4,7 @@ from typing import Any
 
 import click
 import notter.constants as ncons
-from notter.decorators import persist_after
+from notter.utils import load_config, persist_after
 
 
 class Notter:
@@ -33,6 +33,19 @@ class Notter:
             Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.TODOS_PATH)).mkdir(parents=True, exist_ok=True)
             self.set_config("initialized", True)
+
+    def load(self, src_folder: str) -> None:
+        src_path = Path(src_folder).resolve()
+        parent_path = src_path.parent
+        notter_path = parent_path / ".notter"
+        notter_config_file = str(notter_path / "config.json")
+        loaded_config = load_config(notter_config_file)
+        if not loaded_config:
+            click.secho("Could not load Notter configuration", fg="red")
+            quit()
+
+        self.config = loaded_config
+        click.secho("Loaded Notter config from file", fg="green")
 
     def destroy(self) -> None:
         if not self.get_config("initialized"):

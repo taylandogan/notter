@@ -1,6 +1,18 @@
+from typing import Any, Dict
 import click
 import json
 import notter.constants as ncons
+
+
+def load_config(config_file) -> Dict[str, Any]:
+    config_data = None
+    try:
+        with open(config_file, "r") as file:
+            config_data = json.loads(file.read())
+    except FileNotFoundError:
+        click.secho(f"Could not load Notter config from: {config_file}", fg="red")
+
+    return config_data
 
 
 def persist_after(function):

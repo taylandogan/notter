@@ -1,3 +1,4 @@
+import os
 from importlib.metadata import version as pkg_version
 from pathlib import Path
 from typing import Optional, Tuple
@@ -6,18 +7,39 @@ import click
 from click import Context, pass_context
 
 from notter.notter import Notter
+import notter.constants as ncons
 
+SRC_PATH_VAR = "SRC_PATH"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+
 pass_notter = click.make_pass_decorator(Notter)
 
 
 @click.group(invoke_without_command=True)
+@click.option("--init", is_flag=True, help="Initialize Notter tool.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
 @click.pass_context
-def cli(ctx, version) -> None:
+def cli(ctx, init, version) -> None:
     if not ctx.obj:
+        src_path = os.getenv(SRC_PATH_VAR)
+        if not src_path:
+            click.secho(
+                f"Could not find the source folder. Please export your source folder as the environment variable: `{SRC_PATH_VAR}`",
+                fg="red",
+            )
+            quit()
+
+        notter = Notter()
+        if init:
+            # TODO: Do not initialize if the Notter instance is already there
+            click.echo(f"Initializing Notter with `{src_path}` as source folder.")
+            notter.configure(Path(src_path))
+        else:
+            click.echo(f"Using {src_path} as source folder.")
+            notter.load(src_path)
+
         click.echo("Setting context object")
-        ctx.obj = Notter()
+        ctx.obj = notter
 
     if version:
         click.echo(f'Notter {pkg_version("notter")}')
