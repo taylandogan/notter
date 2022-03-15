@@ -1,4 +1,5 @@
 import os
+import subprocess
 from importlib.metadata import version as pkg_version
 from pathlib import Path
 from typing import Optional, Tuple
@@ -31,35 +32,35 @@ def cli(ctx, init, version) -> None:
     notter = Notter()
     if init:
         # TODO: Do not initialize if the Notter instance is already there
-        click.echo(f"Initializing Notter with `{src_path}` as source folder.")
+        # TODO: Separate/handle username & config properly
+        click.echo(f"Binding your Git user to Notter")
+        username_process = subprocess.run(["git", "config", "user.name"], capture_output=True)
+        email_process = subprocess.run(["git", "config", "user.email"], capture_output=True)
+
+        if username_process.returncode != 0 or email_process.returncode != 0:
+            click.secho(
+                "Could not fetch your Git username/email, please make sure that `git config` command works.",
+                fg="red",
+            )
+            quit()
+
+        username = username_process.stdout.decode("utf-8").strip("\n")
+        email = email_process.stdout.decode("utf-8").strip("\n")
+        if not username or not email:
+            click.secho("Git username/email not configured properly.", fg="red")
+            quit()
+
+        click.secho(f"Using Git username: {username}", fg="yellow")
+        click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
+        notter.set_config("username", username)
+        notter.set_config("email", email)
     else:
         notter.load(src_path)
     ctx.obj = notter
 
     if version:
         click.echo(f'Notter {pkg_version("notter")}')
-
-
-@cli.command()
-@click.argument(
-    "src",
-    required=True,
-    type=click.Path(
-        exists=True,
-        file_okay=False,
-        dir_okay=True,
-        writable=True,
-        readable=True,
-        resolve_path=True,
-    ),
-)
-@pass_notter
-def init(notter: Notter, src: str) -> None:
-    """Initialize Notter tool"""
-    click.echo(f"Using {src} as source folder.")
-    src_path = Path(src)
-    notter.configure(src_path)
 
 
 @cli.command()
