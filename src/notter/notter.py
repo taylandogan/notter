@@ -10,7 +10,7 @@ from notter.utils import load_config, persist_config_after
 class Notter:
     def __init__(self) -> None:
         self.config = {}
-        self.config["initialized"] = False
+        self.config[ncons.INITIALIZED_FLAG] = False
 
     @persist_config_after
     def configure(self, src_folder: Path) -> None:
@@ -24,7 +24,7 @@ class Notter:
         self.init_notter_folders()
 
     def init_notter_folders(self) -> None:
-        if self.get_config("initialized"):
+        if self.get_config(ncons.INITIALIZED_FLAG):
             click.secho(f"Notter folders found at location: {self.path}", fg="red")
         else:
             click.secho(f"Creating Notter folders at location: {self.path}", fg="yellow")
@@ -32,7 +32,7 @@ class Notter:
             Path(self.get_config(ncons.ASSUMPTIONS_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.TODOS_PATH)).mkdir(parents=True, exist_ok=True)
-            self.set_config("initialized", True)
+            self.set_config(ncons.INITIALIZED_FLAG, True)
 
     def load(self, src_folder: str) -> None:
         src_path = Path(src_folder).resolve()
@@ -48,7 +48,7 @@ class Notter:
         click.secho(f"Loaded Notter config from file: {notter_config_file}", fg="green")
 
     def destroy(self) -> None:
-        if not self.get_config("initialized"):
+        if not self.get_config(ncons.INITIALIZED_FLAG):
             click.secho("No Notter instance is found, nothing to delete", fg="red")
         else:
             # TODO: Make sure it is not a critical path

@@ -11,3 +11,5 @@ CONFIG_FILENAME = "config.json"
 ASSUMPTIONS_DIRNAME = "assumptions"
 NOTES_DIRNAME = "notes"
 TODOS_DIRNAME = "todos"
+
+INITIALIZED_FLAG = "initialized"
