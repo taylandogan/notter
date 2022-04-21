@@ -53,8 +53,8 @@ def cli(ctx, init, version) -> None:
         click.secho(f"Using Git username: {username}", fg="yellow")
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
-        notter.set_config("username", username)
-        notter.set_config("email", email)
+        notter.set_config(ncons.USERNAME, username)
+        notter.set_config(ncons.EMAIL, email)
     else:
         notter.load(src_path)
     ctx.obj = notter

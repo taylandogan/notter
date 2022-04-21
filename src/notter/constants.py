@@ -1,6 +1,8 @@
 PATH = "path"
 SRC_PATH = "src_path"
 CONFIG_PATH = "config_path"
+USERNAME = "username"
+EMAIL = "email"
 ASSUMPTIONS_PATH = "ass_path"
 NOTES_PATH = "notes_path"
 TODOS_PATH = "todos_path"
