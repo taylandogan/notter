@@ -15,7 +15,7 @@ def load_config(config_file) -> Dict[str, Any]:
     return config_data
 
 
-def persist_after(function):
+def persist_config_after(function):
     def wrapper(self, *args, **kwargs):
         retval = function(self, *args, **kwargs)
 

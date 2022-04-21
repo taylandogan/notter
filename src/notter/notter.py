@@ -4,7 +4,7 @@ from typing import Any
 
 import click
 import notter.constants as ncons
-from notter.utils import load_config, persist_after
+from notter.utils import load_config, persist_config_after
 
 
 class Notter:
@@ -12,7 +12,7 @@ class Notter:
         self.config = {}
         self.config["initialized"] = False
 
-    @persist_after
+    @persist_config_after
     def configure(self, src_folder: Path) -> None:
         self.path = src_folder.parent / ".notter"
         self.config[ncons.CONFIG_PATH] = str(self.path / ncons.CONFIG_FILENAME)
@@ -38,7 +38,7 @@ class Notter:
         src_path = Path(src_folder).resolve()
         parent_path = src_path.parent
         notter_path = parent_path / ".notter"
-        notter_config_file = str(notter_path / "config.json")
+        notter_config_file = str(notter_path / ncons.CONFIG_FILENAME)
         loaded_config = load_config(notter_config_file)
         if not loaded_config:
             click.secho("Could not load Notter configuration", fg="red")
@@ -69,7 +69,7 @@ class Notter:
 
         return value
 
-    @persist_after
+    @persist_config_after
     def set_config(self, key: str, value: Any) -> None:
         self.config[key] = value
         click.secho(f"Set config `{key}` to `{value}`", fg="yellow")
