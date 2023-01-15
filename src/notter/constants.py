@@ -3,13 +3,12 @@ SRC_PATH = "src_path"
 CONFIG_PATH = "config_path"
 USERNAME = "username"
 EMAIL = "email"
-ASSUMPTIONS_PATH = "ass_path"
+
 NOTES_PATH = "notes_path"
-TODOS_PATH = "todos_path"
+NOTES_INDEX_PATH = "notes_index_path"
+NOTES_INDEX_FILENAME = "idx_notes.json"
 
 CONFIG_FILENAME = "config.json"
-ASSUMPTIONS_DIRNAME = "assumptions"
 NOTES_DIRNAME = "notes"
-TODOS_DIRNAME = "todos"
 
 INITIALIZED_FLAG = "initialized"

@@ -18,9 +18,7 @@ class Notter:
         self.config[ncons.CONFIG_PATH] = str(self.path / ncons.CONFIG_FILENAME)
         self.config[ncons.SRC_PATH] = str(src_folder)
         self.config[ncons.PATH] = str(self.path)
-        self.config[ncons.ASSUMPTIONS_PATH] = str(self.path / ncons.ASSUMPTIONS_DIRNAME)
         self.config[ncons.NOTES_PATH] = str(self.path / ncons.NOTES_DIRNAME)
-        self.config[ncons.TODOS_PATH] = str(self.path / ncons.TODOS_DIRNAME)
         self.init_notter_folders()
 
     def init_notter_folders(self) -> None:
@@ -29,9 +27,7 @@ class Notter:
         else:
             click.secho(f"Creating Notter folders at location: {self.path}", fg="yellow")
             Path(self.get_config(ncons.PATH)).mkdir(parents=True, exist_ok=True)
-            Path(self.get_config(ncons.ASSUMPTIONS_PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
-            Path(self.get_config(ncons.TODOS_PATH)).mkdir(parents=True, exist_ok=True)
             self.set_config(ncons.INITIALIZED_FLAG, True)
 
     def load(self, src_folder: str) -> None:
