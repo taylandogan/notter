@@ -1,47 +1,29 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "notter"
 version = "0.1.0"
 description = "A simple note taking tool for software projects."
 authors = [
-    "Taylan Dogan <taylandogan.nl@gmail.com>"
+    {name = "Taylan Dogan", email = "taylandogan.nl@gmail.com"},
 ]
-license = "MIT"
+license = {file = "LICENSE"}
 readme = "README.md"
-python = "^3.10"
-homepage = "https://github.com/taylandogan/notter"
-repository = "https://github.com/taylandogan/notter"
-documentation = "https://github.com/taylandogan/notter"
-
+requires-python = ">=3.10"
 keywords = ["notes", "todos", "tracking", "index"]
 
-packages = [
-    { include = "notter" },
-]
-
 # Requirements
-dependencies = [
-    "click",
-    "pygments",
-]
+dependencies = ["click", "pygments"]
 
 [project.optional-dependencies]
-dev  = [
-    "black",
-    "flake8",
-    "isort",
-    "mypy",
-]
+# TODO: Add minimum versions next to dev/test dependencies
+dev  = ["black", "flake8", "isort", "mypy"]
+test = [ "coverage"]
 
 [scripts]
 notter = "notter.cli:cli"
-
-[build-system]
-requires = [
-    "setuptools",
-    "setuptools_scm",
-    "wheel"
-]
-build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 120
