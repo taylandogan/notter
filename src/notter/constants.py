@@ -12,3 +12,4 @@ CONFIG_FILENAME = "config.json"
 NOTES_DIRNAME = "notes"
 
 INITIALIZED_FLAG = "initialized"
+IDX_INITIALIZED_FLAG = "idx_initialized"

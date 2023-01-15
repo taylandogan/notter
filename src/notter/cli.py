@@ -6,14 +6,14 @@ from typing import Optional, Tuple
 
 import click
 from click import Context, pass_context
+from notter.context import NotterContext
+from notter.controller import NoteController
 
 from notter.notter import Notter
 import notter.constants as ncons
 
 SRC_PATH_VAR = "SRC_PATH"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-
-pass_notter = click.make_pass_decorator(Notter)
 
 
 @click.group(invoke_without_command=True)
@@ -29,6 +29,7 @@ def cli(ctx, init, version) -> None:
         )
         quit()
 
+    # Initialize Notter instance
     notter = Notter()
 
     if version:
@@ -62,16 +63,20 @@ def cli(ctx, init, version) -> None:
         notter.set_config(ncons.USERNAME, username)
         notter.set_config(ncons.EMAIL, email)
 
-    ctx.obj = notter
+    controller = NoteController(notter)
+    # Add a custom object to context so they are available for other commands
+    if ctx.obj is None:
+        ctx.obj = NotterContext(notter, controller)
 
 
 @cli.command()
 @click.option("--get", help="get value of a config")
 @click.option("--set", "setc", nargs=2, type=str, help="set a config with a key-value pair")
 @click.option("--all", "allc", is_flag=True, help="show all the config")
-@pass_notter
-def config(notter: Notter, get: Optional[str], setc: Optional[Tuple[str, str]], allc: bool) -> None:
+@pass_context
+def config(ctx: Context, get: Optional[str], setc: Optional[Tuple[str, str]], allc: bool) -> None:
     """Configure Notter configuration."""
+    notter = ctx.obj.notter
     if get:
         value = notter.get_config(get)
         click.echo(value)
@@ -83,10 +88,10 @@ def config(notter: Notter, get: Optional[str], setc: Optional[Tuple[str, str]], 
 
 
 @cli.command()
-@pass_notter
 @click.pass_context
-def destroy(ctx: Context, notter: Notter):
+def destroy(ctx: Context):
     """Deletes configured Notter instance"""
+    notter = ctx.obj.notter
     notter_path = notter.get_config(ncons.PATH)
     click.confirm(f"Do you really want to delete the Notter instance initialized at `{notter_path}` ?", abort=True)
     notter.destroy()

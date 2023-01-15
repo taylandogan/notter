@@ -11,6 +11,7 @@ class Notter:
     def __init__(self) -> None:
         self.config = {}
         self.config[ncons.INITIALIZED_FLAG] = False
+        self.config[ncons.IDX_INITIALIZED_FLAG] = False
 
     @persist_config_after
     def configure(self, src_folder: Path) -> None:
