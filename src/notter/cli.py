@@ -30,7 +30,13 @@ def cli(ctx, init, version) -> None:
         quit()
 
     notter = Notter()
-    if init:
+
+    if version:
+        click.echo(f'Notter {pkg_version("notter")}')
+
+    if not init:
+        notter.load(src_path)
+    else:
         # TODO: Do not initialize if the Notter instance is already there
         # TODO: Separate/handle username & config properly
         click.echo(f"Binding your Git user to Notter")
@@ -55,12 +61,8 @@ def cli(ctx, init, version) -> None:
         notter.configure(Path(src_path).resolve())
         notter.set_config(ncons.USERNAME, username)
         notter.set_config(ncons.EMAIL, email)
-    else:
-        notter.load(src_path)
-    ctx.obj = notter
 
-    if version:
-        click.echo(f'Notter {pkg_version("notter")}')
+    ctx.obj = notter
 
 
 @cli.command()

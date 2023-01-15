@@ -23,7 +23,7 @@ def persist_config_after(function):
         with open(config_file, "w+") as file:
             json.dump(self.config, file)
 
-        click.secho(f"Notter config persisted", fg="green")
+        click.secho(f"Notter config updated", fg="green")
         return retval
 
     return wrapper
