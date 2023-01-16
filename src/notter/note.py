@@ -18,25 +18,16 @@ class Note:
         filepath: str,
         line: int,
         type: NoteType = NoteType.NOTE,
+        note_id: str = None,
+        timestamp: str = None,
     ) -> None:
-        self.note_id = str(uuid.uuid4())
         self.username = username
         self.email = email
-        self.timestamp = str(datetime.now())
         self.filepath = filepath
         self.line = line
         self.type = type
-
-    def json(self) -> Dict[str, Any]:
-        return {
-            "note_id": self.note_id,
-            "type": self.type.value,
-            "username": self.username,
-            "email": self.email,
-            "filepath": self.filepath,
-            "line": self.line,
-            "timestamp": self.timestamp,
-        }
+        self.note_id = note_id if note_id else str(uuid.uuid4())
+        self.timestamp = timestamp if timestamp else str(datetime.now())
 
 
 class Content:

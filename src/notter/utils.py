@@ -4,6 +4,11 @@ import json
 import notter.constants as ncons
 
 
+class CustomEncoder(json.JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+
 def load_config(config_file) -> Dict[str, Any]:
     config_data = None
     try:
@@ -22,6 +27,20 @@ def persist_config_after(function):
         config_file = self.get_config(ncons.CONFIG_PATH)
         with open(config_file, "w+") as file:
             json.dump(self.config, file)
+
+        click.secho(f"Notter config updated", fg="green")
+        return retval
+
+    return wrapper
+
+
+def persist_index_after(function):
+    def wrapper(self, *args, **kwargs):
+        retval = function(self, *args, **kwargs)
+
+        notter_idx_path = self.notter.get_config(ncons.NOTES_INDEX_PATH)
+        with open(notter_idx_path, "w") as idx_file:
+            idx_file.write(json.dumps(self.idx))
 
         click.secho(f"Notter config updated", fg="green")
         return retval

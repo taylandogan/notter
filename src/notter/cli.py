@@ -8,6 +8,7 @@ import click
 from click import Context, pass_context
 from notter.context import NotterContext
 from notter.controller import NoteController
+from notter.exceptions import NoteNotFound
 
 from notter.notter import Notter
 import notter.constants as ncons
@@ -96,6 +97,21 @@ def destroy(ctx: Context):
     click.confirm(f"Do you really want to delete the Notter instance initialized at `{notter_path}` ?", abort=True)
     notter.destroy()
     ctx.obj = None
+
+
+@cli.command()
+@pass_context
+def create(ctx: Context) -> None:
+    ctx.obj.controller.create("hahlool.py", 55, "wow")
+
+
+@cli.command()
+@pass_context
+def delete(ctx: Context) -> None:
+    try:
+        ctx.obj.controller.delete("haha.py", 4)
+    except NoteNotFound as exc:
+        click.secho(exc.message, fg="red")
 
 
 if __name__ == "__main__":

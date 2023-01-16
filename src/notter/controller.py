@@ -24,5 +24,5 @@ class NoteController:
     def update(self) -> None:
         pass
 
-    def delete(self) -> None:
-        pass
+    def delete(self, filepath: str, line: int) -> None:
+        self.repository.delete(filepath, line)
