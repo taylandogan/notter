@@ -8,7 +8,7 @@ import click
 from click import Context, pass_context
 from notter.context import NotterContext
 from notter.controller import NoteController
-from notter.exceptions import NoteNotFound
+from notter.exceptions import NotterException
 
 from notter.notter import Notter
 import notter.constants as ncons
@@ -102,7 +102,19 @@ def destroy(ctx: Context):
 @cli.command()
 @pass_context
 def create(ctx: Context) -> None:
-    ctx.obj.controller.create("hahlool.py", 55, "wow")
+    try:
+        ctx.obj.controller.create("hahlool.py", 55, "wow")
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
+
+
+@cli.command()
+@pass_context
+def update(ctx: Context) -> None:
+    try:
+        ctx.obj.controller.update("hahlool.py", 55, "updated this note")
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
 
 
 @cli.command()
@@ -110,7 +122,7 @@ def create(ctx: Context) -> None:
 def delete(ctx: Context) -> None:
     try:
         ctx.obj.controller.delete("haha.py", 4)
-    except NoteNotFound as exc:
+    except NotterException as exc:
         click.secho(exc.message, fg="red")
 
 

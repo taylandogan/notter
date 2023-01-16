@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from uuid import uuid4
-from notter.exceptions import NoteNotFound
+from notter.exceptions import NoteAlreadyExists, NoteNotFound
 
 from notter.note import Note, NoteWithContent
 from notter.notter import Notter
@@ -51,6 +51,10 @@ class JsonFileRepository(BaseRepository):
         notes_folder = Path(self.notter.get_config(ncons.NOTES_PATH))
         note_path = str(notes_folder / note_with_content.note.note_id)
 
+        idx_key = JsonFileRepository._get_index_key(note_with_content.note.filepath, note_with_content.note.line)
+        if self.idx.get(idx_key, None):
+            raise NoteAlreadyExists()
+
         # TODO: Make these two operations atomic
         # Write note content to a file
         with open(note_path, "w") as note_file:
@@ -58,15 +62,15 @@ class JsonFileRepository(BaseRepository):
 
         # Update the index
         # TODO: Handle possible JSON errors
-        idx_key = JsonFileRepository._get_index_key(note_with_content.note.filepath, note_with_content.note.line)
         self.idx[idx_key] = json.dumps(note_with_content.note, cls=CustomEncoder)
 
     def get(self) -> None:
         pass
 
     @persist_index_after
-    def update(self) -> None:
-        pass
+    def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:
+        self.delete(filepath, line)
+        self.create(note_with_content)
 
     @persist_index_after
     def delete(self, filepath: str, line: int) -> None:
