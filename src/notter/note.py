@@ -27,7 +27,7 @@ class Note:
         self.line = line
         self.type = type
         self.note_id = note_id if note_id else str(uuid.uuid4())
-        self.timestamp = timestamp if timestamp else str(datetime.now())
+        self.timestamp = timestamp if timestamp else str(datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 
 
 class Content:
@@ -39,3 +39,6 @@ class NoteWithContent:
     def __init__(self, note: Note, content: Content) -> None:
         self.note = note
         self.content = content
+
+    def __str__(self) -> str:
+        return f"{self.content.text} - {self.note.username} / {self.note.timestamp}"

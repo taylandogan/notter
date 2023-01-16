@@ -3,7 +3,7 @@ from pathlib import Path
 from uuid import uuid4
 from notter.exceptions import NoteAlreadyExists, NoteNotFound
 
-from notter.note import Note, NoteWithContent
+from notter.note import Content, Note, NoteWithContent
 from notter.notter import Notter
 import notter.constants as ncons
 from notter.utils import CustomEncoder, persist_index_after
@@ -64,8 +64,23 @@ class JsonFileRepository(BaseRepository):
         # TODO: Handle possible JSON errors
         self.idx[idx_key] = json.dumps(note_with_content.note, cls=CustomEncoder)
 
-    def get(self) -> None:
-        pass
+    def read(self, filepath: str, line: int) -> NoteWithContent:
+        idx_key = JsonFileRepository._get_index_key(filepath, line)
+        entry = self.idx.get(idx_key, None)
+
+        if not entry:
+            raise NoteNotFound()
+
+        # TODO: Handle possible JSON errors
+        note = Note(**json.loads(entry))
+        notes_folder = Path(self.notter.get_config(ncons.NOTES_PATH))
+        note_path = str(notes_folder / note.note_id)
+
+        with open(note_path, "r") as note_file:
+            text = note_file.read()
+
+        content = Content(text)
+        return NoteWithContent(note, content)
 
     @persist_index_after
     def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:

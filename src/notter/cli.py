@@ -103,7 +103,17 @@ def destroy(ctx: Context):
 @pass_context
 def create(ctx: Context) -> None:
     try:
-        ctx.obj.controller.create("hahlool.py", 55, "wow")
+        ctx.obj.controller.create("test.py", 2, "can you find this one?")
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
+
+
+@cli.command()
+@pass_context
+def read(ctx: Context) -> None:
+    try:
+        note = ctx.obj.controller.read("test.py", 2)
+        print(note)
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 

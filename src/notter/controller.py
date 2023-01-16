@@ -21,8 +21,8 @@ class NoteController:
         note_with_content = self._create_note_with_content(filepath, line, text, type)
         self.repository.create(note_with_content)
 
-    def get(self) -> None:
-        pass
+    def read(self, filepath: str, line: int) -> NoteWithContent:
+        return self.repository.read(filepath, line)
 
     def update(self, filepath: str, line: int, text: str, type: NoteType = NoteType.NOTE) -> None:
         note_with_content = self._create_note_with_content(filepath, line, text, type)
