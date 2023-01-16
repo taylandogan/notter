@@ -42,7 +42,7 @@ def persist_index_after(function):
         with open(notter_idx_path, "w") as idx_file:
             idx_file.write(json.dumps(self.idx))
 
-        click.secho(f"Notter config updated", fg="green")
+        click.secho(f"Notter index updated", fg="green")
         return retval
 
     return wrapper

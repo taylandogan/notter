@@ -9,6 +9,7 @@ from click import Context, pass_context
 from notter.context import NotterContext
 from notter.controller import NoteController
 from notter.exceptions import NotterException
+from notter.note import NoteType
 
 from notter.notter import Notter
 import notter.constants as ncons
@@ -100,44 +101,52 @@ def destroy(ctx: Context):
 
 
 @cli.command()
+@click.argument("filepath", type=str)
+@click.argument("line", type=int)
+@click.argument("text", type=str)
+@click.argument("type", type=NoteType)
 @pass_context
-def create(ctx: Context) -> None:
+def create(ctx: Context, filepath: str, line: int, text: str, type: NoteType) -> None:
     try:
-        ctx.obj.controller.create("test.py", 2, "can you find this one?")
+        ctx.obj.controller.create(filepath, line, text, type)
+        click.secho(f"Note created", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
 
 @cli.command()
+@click.argument("filepath", type=str)
+@click.argument("line", type=int)
 @pass_context
-def read(ctx: Context) -> None:
+def read(ctx: Context, filepath: str, line: int) -> None:
     try:
-        note = ctx.obj.controller.read("test.py", 2)
-        print(note)
+        note = ctx.obj.controller.read(filepath, line)
+        click.echo(note)
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
 
 @cli.command()
+@click.argument("filepath", type=str)
+@click.argument("line", type=int)
+@click.argument("text", type=str)
+@click.argument("type", type=NoteType)
 @pass_context
-def update(ctx: Context) -> None:
+def update(ctx: Context, filepath: str, line: int, text: str, type: NoteType) -> None:
     try:
-        ctx.obj.controller.update("hahlool.py", 55, "updated this note")
+        ctx.obj.controller.update(filepath, line, text, type)
+        click.secho(f"Note updated", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
 
 @cli.command()
+@click.argument("filepath", type=str)
+@click.argument("line", type=int)
 @pass_context
-def delete(ctx: Context) -> None:
+def delete(ctx: Context, filepath: str, line: int) -> None:
     try:
-        ctx.obj.controller.delete("haha.py", 4)
+        ctx.obj.controller.delete(filepath, line)
+        click.secho(f"Note deleted", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
-
-
-if __name__ == "__main__":
-    # cli(["init", "./tests/test2"])
-    # cli(["config", "--set", "name", "taylan"])
-    # cli(["config", "--get", "name"])
-    pass
