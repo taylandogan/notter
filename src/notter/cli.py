@@ -35,7 +35,8 @@ def cli(ctx, init, version) -> None:
     notter = Notter()
 
     if version:
-        click.echo(f'Notter {pkg_version("notter")}')
+        click.echo(f'{pkg_version("notter")}')
+        return
 
     if not init:
         notter.load(src_path)
@@ -116,9 +117,9 @@ def create(ctx: Context, filepath: str, line: int, text: str, type: NoteType) ->
 
 @cli.command()
 @click.argument("filepath", type=str)
-@click.argument("line", type=int)
+@click.argument("line", type=Optional[int])
 @pass_context
-def read(ctx: Context, filepath: str, line: int) -> None:
+def read(ctx: Context, filepath: str, line: Optional[int]) -> None:
     try:
         note = ctx.obj.controller.read(filepath, line)
         click.echo(note)
