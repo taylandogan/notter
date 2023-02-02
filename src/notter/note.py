@@ -18,16 +18,18 @@ class Note:
         filepath: str,
         line: int,
         type: NoteType = NoteType.NOTE,
-        note_id: str = None,
-        timestamp: str = None,
+        id: str = None,
+        created_at: str = None,
+        updated_at: str = None,
     ) -> None:
         self.username = username
         self.email = email
         self.filepath = filepath
         self.line = line
         self.type = type
-        self.note_id = note_id if note_id else str(uuid.uuid4())
-        self.timestamp = timestamp if timestamp else str(datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+        self.id = id or str(uuid.uuid4())
+        self.created_at = created_at or datetime.now().isoformat()
+        self.updated_at = updated_at or datetime.now().isoformat()
 
 
 class Content:
@@ -41,4 +43,4 @@ class NoteWithContent:
         self.content = content
 
     def __str__(self) -> str:
-        return f"{self.content.text} - {self.note.username} / {self.note.timestamp}"
+        return f"{self.content.text} - {self.note.username} / {self.note.updated_at}"

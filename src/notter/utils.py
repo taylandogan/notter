@@ -40,7 +40,7 @@ def persist_index_after(function):
 
         notter_idx_path = self.notter.get_config(ncons.NOTES_INDEX_PATH)
         with open(notter_idx_path, "w") as idx_file:
-            idx_file.write(json.dumps(self.idx))
+            json.dump(self.idx, idx_file, cls=CustomEncoder)
 
         click.secho(f"Notter index updated", fg="green")
         return retval
