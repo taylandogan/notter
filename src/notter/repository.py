@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import notter.constants as ncons
 from notter.exceptions import NoteAlreadyExists, NoteNotFound
-from notter.note import Content, Note, NoteWithContent
+from notter.model import Content, Note, NoteWithContent
 from notter.notter import Notter
 from notter.utils import persist_index_after
 

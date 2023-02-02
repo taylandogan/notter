@@ -11,7 +11,7 @@ import notter.constants as ncons
 from notter.context import NotterContext
 from notter.controller import NoteController
 from notter.exceptions import NotterException
-from notter.note import NoteType
+from notter.model import NoteType
 from notter.notter import Notter
 
 SRC_PATH_VAR = "SRC_PATH"

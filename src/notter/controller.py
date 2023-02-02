@@ -1,5 +1,5 @@
 import notter.constants as ncons
-from notter.note import Content, Note, NoteType, NoteWithContent
+from notter.model import Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
 from notter.repository import JsonFileRepository
 
