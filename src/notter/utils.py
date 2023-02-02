@@ -1,6 +1,8 @@
-from typing import Any, Dict
-import click
 import json
+from typing import Any, Dict
+
+import click
+
 import notter.constants as ncons
 
 

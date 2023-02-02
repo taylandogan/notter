@@ -3,6 +3,7 @@ from shutil import rmtree
 from typing import Any
 
 import click
+
 import notter.constants as ncons
 from notter.utils import load_config, persist_config_after
 

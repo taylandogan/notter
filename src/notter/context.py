@@ -1,5 +1,5 @@
-from notter.notter import Notter
 from notter.controller import NoteController
+from notter.notter import Notter
 
 
 class NotterContext:

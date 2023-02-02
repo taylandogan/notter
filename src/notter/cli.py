@@ -6,13 +6,13 @@ from typing import Optional, Tuple
 
 import click
 from click import Context, pass_context
+
+import notter.constants as ncons
 from notter.context import NotterContext
 from notter.controller import NoteController
 from notter.exceptions import NotterException
 from notter.note import NoteType
-
 from notter.notter import Notter
-import notter.constants as ncons
 
 SRC_PATH_VAR = "SRC_PATH"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])

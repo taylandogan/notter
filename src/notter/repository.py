@@ -1,14 +1,14 @@
-from datetime import datetime
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Dict
 from uuid import uuid4
-from notter.exceptions import NoteAlreadyExists, NoteNotFound
 
+import notter.constants as ncons
+from notter.exceptions import NoteAlreadyExists, NoteNotFound
 from notter.note import Content, Note, NoteWithContent
 from notter.notter import Notter
-import notter.constants as ncons
-from notter.utils import CustomEncoder, persist_index_after
+from notter.utils import persist_index_after
 
 
 class BaseRepository:
