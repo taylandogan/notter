@@ -36,12 +36,11 @@ def persist_config_after(function):
     return wrapper
 
 
-def persist_index_after(function):
-    def wrapper(self, *args, **kwargs):
+def persist_index_after(function) -> Any:
+    def wrapper(self, *args, **kwargs) -> Any:
         retval = function(self, *args, **kwargs)
 
-        notter_idx_path = self.notter.get_config(ncons.NOTES_INDEX_PATH)
-        with open(notter_idx_path, "w") as idx_file:
+        with open(self.idx_path, "w") as idx_file:
             json.dump(self.idx, idx_file, cls=CustomEncoder)
 
         click.secho(f"Notter index updated", fg="green")

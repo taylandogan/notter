@@ -117,9 +117,9 @@ def create(ctx: Context, filepath: str, line: int, text: str, type: NoteType) ->
 
 @cli.command()
 @click.argument("filepath", type=str)
-@click.argument("line", type=Optional[int])
+@click.argument("line", type=int)
 @pass_context
-def read(ctx: Context, filepath: str, line: Optional[int]) -> None:
+def read(ctx: Context, filepath: str, line: int) -> None:
     try:
         note = ctx.obj.controller.read(filepath, line)
         click.echo(note)
