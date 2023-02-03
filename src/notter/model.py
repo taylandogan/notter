@@ -42,3 +42,14 @@ class NoteWithContent:
 
     def __str__(self) -> str:
         return f"{self.content.text} - {self.note.username} / {self.note.updated_at}"
+
+
+class Comment:
+    def __init__(self, filepath: str, text: str, line: int, multiline: bool) -> None:
+        self.filepath = filepath
+        self.text = text
+        self.line = line
+        self.multiline = multiline
+
+    def __str__(self) -> str:
+        return f"{self.filepath}:{self.line} - {self.text}"

@@ -1,7 +1,7 @@
 import json
 from typing import Dict, Optional
-from notter.exceptions import NoteAlreadyExists, NoteNotFound
 
+from notter.exceptions import NoteAlreadyExists, NoteNotFound
 from notter.model import Note
 from notter.utils import CustomEncoder, persist_index_after
 

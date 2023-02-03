@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 from pathlib import Path
 
@@ -6,7 +5,6 @@ import notter.constants as ncons
 from notter.index import NoteIndex
 from notter.model import Content, Note, NoteWithContent
 from notter.notter import Notter
-from notter.utils import CustomEncoder
 
 
 class BaseRepository:

@@ -151,3 +151,16 @@ def delete(ctx: Context, filepath: str, line: int) -> None:
         click.secho(f"Note deleted", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
+
+
+@cli.command()
+@pass_context
+def discover(ctx: Context) -> None:
+    try:
+        # TODO: Retrieve tags from user
+        tags = ["TODO", "FIXME", "NOTE"]
+        comments = ctx.obj.controller.discover(tags)
+        comments_str = "\n".join([str(comment) for comment in comments])
+        click.echo(comments_str)
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")

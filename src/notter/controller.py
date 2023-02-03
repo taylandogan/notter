@@ -1,5 +1,8 @@
+from typing import List
+
 import notter.constants as ncons
-from notter.model import Content, Note, NoteType, NoteWithContent
+from notter.explorer import LexicalExplorer
+from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
 from notter.repository import JsonFileRepository
 
@@ -8,6 +11,7 @@ class NoteController:
     def __init__(self, notter: Notter):
         self.notter = notter
         self.repository = JsonFileRepository(self.notter)
+        self.explorer = LexicalExplorer(self.notter)
 
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
         username = self.notter.get_config(ncons.USERNAME)
@@ -30,3 +34,6 @@ class NoteController:
 
     def delete(self, filepath: str, line: int) -> None:
         self.repository.delete(filepath, line)
+
+    def discover(self, tags: List[str]) -> List[Comment]:
+        return self.explorer.discover(tags)
