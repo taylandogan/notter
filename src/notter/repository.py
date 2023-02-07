@@ -1,9 +1,11 @@
 from datetime import datetime
 from pathlib import Path
+from typing import List
 
 import notter.constants as ncons
+from notter.exceptions import NotterException
 from notter.index import NoteIndex
-from notter.model import Content, Note, NoteWithContent
+from notter.model import Comment, Content, Note, NoteWithContent
 from notter.notter import Notter
 
 
@@ -83,6 +85,22 @@ class JsonFileRepository(BaseRepository):
         note_path = self._get_note_content_path(note.id)
         # Remove note content
         Path(note_path).unlink()
+
+    def prune(self, comments: List[Comment]) -> List[str]:
+        comments_set = set()
+        for comment in comments:
+            comments_set.add(f"{comment.filepath}:{comment.line}")
+
+        entry_set = self.note_index.summarize()
+        items_to_prune = list(entry_set.difference(comments_set))
+        for item in items_to_prune:
+            filepath, line = item.split(":")
+            try:
+                self.delete(filepath, line)
+            except NotterException:
+                pass
+
+        return items_to_prune
 
     def _get_note_content_path(self, note_id: str) -> str:
         notes_folder = Path(self.notter.get_config(ncons.NOTES_PATH))

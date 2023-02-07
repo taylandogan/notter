@@ -41,6 +41,14 @@ class NoteIndex:
 
         return self.idx[filepath][line]
 
+    def summarize(self) -> set():
+        entry_set = set()
+        for filepath, note_dict in self.idx.items():
+            for line in note_dict.keys():
+                entry_set.add(f"{filepath}:{line}")
+
+        return entry_set
+
     @persist_index_after
     def store(self, note: Note, update: bool = False) -> None:
         note_exists = self.seek(note.filepath, str(note.line))

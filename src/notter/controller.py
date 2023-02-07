@@ -46,4 +46,5 @@ class NoteController:
                 except NoteAlreadyExists:
                     continue
 
+        pruned = self.repository.prune(comments)
         return comments
