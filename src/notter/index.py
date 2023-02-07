@@ -17,7 +17,7 @@ class NoteIndex:
 
     def init_index(self, index_path: str) -> None:
         with open(index_path, "w+") as idx_file:
-            json.dump(self.idx, idx_file, cls=CustomEncoder)
+            json.dump(self.idx, idx_file, cls=CustomEncoder, indent=4)
 
     def load_index(self, index_path: str) -> None:
         with open(index_path, "r") as file:

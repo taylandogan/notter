@@ -28,7 +28,7 @@ def persist_config_after(function):
 
         config_file = self.get_config(ncons.CONFIG_PATH)
         with open(config_file, "w+") as file:
-            json.dump(self.config, file)
+            json.dump(self.config, file, indent=4)
 
         click.secho(f"Notter config updated", fg="green")
         return retval
@@ -41,7 +41,7 @@ def persist_index_after(function) -> Any:
         retval = function(self, *args, **kwargs)
 
         with open(self.idx_path, "w") as idx_file:
-            json.dump(self.idx, idx_file, cls=CustomEncoder)
+            json.dump(self.idx, idx_file, cls=CustomEncoder, indent=4)
 
         click.secho(f"Notter index updated", fg="green")
         return retval

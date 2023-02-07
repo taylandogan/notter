@@ -158,7 +158,7 @@ def delete(ctx: Context, filepath: str, line: int) -> None:
 def discover(ctx: Context) -> None:
     try:
         # TODO: Retrieve tags from user
-        tags = ["TODO", "FIXME", "NOTE"]
+        tags = ["TODO", "FIXME"]
         comments = ctx.obj.controller.discover(tags)
         comments_str = "\n".join([str(comment) for comment in comments])
         click.echo(comments_str)

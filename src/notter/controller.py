@@ -1,6 +1,7 @@
 from typing import List
 
 import notter.constants as ncons
+from notter.exceptions import NoteAlreadyExists
 from notter.explorer import LexicalExplorer
 from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
@@ -35,5 +36,14 @@ class NoteController:
     def delete(self, filepath: str, line: int) -> None:
         self.repository.delete(filepath, line)
 
-    def discover(self, tags: List[str]) -> List[Comment]:
-        return self.explorer.discover(tags)
+    def discover(self, tags: List[str], save_as_notter_notes: bool = True) -> List[Comment]:
+        comments: List[Comment] = self.explorer.discover(tags)
+
+        if save_as_notter_notes:
+            for comment in comments:
+                try:
+                    self.create(comment.filepath, comment.line, comment.text, comment.type)
+                except NoteAlreadyExists:
+                    continue
+
+        return comments

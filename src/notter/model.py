@@ -45,10 +45,11 @@ class NoteWithContent:
 
 
 class Comment:
-    def __init__(self, filepath: str, text: str, line: int, multiline: bool) -> None:
+    def __init__(self, filepath: str, text: str, line: int, type: NoteType, multiline: bool = False) -> None:
         self.filepath = filepath
         self.text = text
         self.line = line
+        self.type = type
         self.multiline = multiline
 
     def __str__(self) -> str:
