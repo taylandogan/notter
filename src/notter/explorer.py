@@ -21,7 +21,7 @@ class LexicalExplorer(BaseExplorer):
     def __init__(self, notter: Notter) -> None:
         self.source_path = notter.get_config(ncons.SRC_PATH)
 
-    def discover(self, tags: List[str]) -> None:
+    def discover(self, tags: List[str]) -> List[Comment]:
         comments = []
         tags = [tag.lower() for tag in tags]
         glob_pattern = str(Path(self.source_path) / "**/*.py")

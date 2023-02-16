@@ -1,3 +1,4 @@
+import json
 import os
 import subprocess
 from importlib.metadata import version as pkg_version
@@ -160,7 +161,6 @@ def discover(ctx: Context) -> None:
         # TODO: Retrieve tags from user
         tags = ["TODO", "FIXME"]
         comments = ctx.obj.controller.discover(tags)
-        comments_str = "\n".join([str(comment) for comment in comments])
-        click.echo(comments_str)
+        click.echo(json.dumps(comments, default=lambda o: o.__dict__))
     except NotterException as exc:
         click.secho(exc.message, fg="red")
