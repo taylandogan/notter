@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import click
 
@@ -11,7 +11,7 @@ class CustomEncoder(json.JSONEncoder):
         return o.__dict__
 
 
-def load_config(config_file) -> Dict[str, Any]:
+def load_config(config_file: str) -> Optional[Dict[str, Any]]:
     config_data = None
     try:
         with open(config_file, "r") as file:
@@ -36,8 +36,8 @@ def persist_config_after(function):
     return wrapper
 
 
-def persist_index_after(function) -> Any:
-    def wrapper(self, *args, **kwargs) -> Any:
+def persist_index_after(function):
+    def wrapper(self, *args, **kwargs):
         retval = function(self, *args, **kwargs)
 
         with open(self.idx_path, "w") as idx_file:

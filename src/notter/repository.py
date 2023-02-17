@@ -10,19 +10,19 @@ from notter.notter import Notter
 
 
 class BaseRepository:
-    def __init__(self, notter: Notter):
+    def __init__(self, notter: Notter) -> None:
         raise NotImplementedError
 
-    def create(self, note: Note):
+    def create(self, note_with_content: NoteWithContent) -> None:
         raise NotImplementedError
 
-    def read(self) -> None:
+    def read(self, filepath: str, line: int) -> NoteWithContent:
         raise NotImplementedError
 
-    def update(self) -> None:
+    def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:
         raise NotImplementedError
 
-    def delete(self) -> None:
+    def delete(self, filepath: str, line: int) -> None:
         raise NotImplementedError
 
 
@@ -32,13 +32,13 @@ class JsonFileRepository(BaseRepository):
 
         idx_initialized = self.notter.get_config(ncons.IDX_INITIALIZED_FLAG)
         notter_path = Path(self.notter.get_config(ncons.PATH))
-        note_idx_path = notter_path / ncons.NOTES_INDEX_FILENAME
+        note_idx_path = str(notter_path / ncons.NOTES_INDEX_FILENAME)
 
         self.note_index: NoteIndex = NoteIndex(note_idx_path)
 
         if not idx_initialized:
             self.note_index.init_index(note_idx_path)
-            self.notter.set_config(ncons.NOTES_INDEX_PATH, str(note_idx_path))
+            self.notter.set_config(ncons.NOTES_INDEX_PATH, note_idx_path)
             self.notter.set_config(ncons.IDX_INITIALIZED_FLAG, True)
         else:
             self.note_index.load_index(note_idx_path)
@@ -53,7 +53,7 @@ class JsonFileRepository(BaseRepository):
 
     def read(self, filepath: str, line: int) -> NoteWithContent:
         entry = self.note_index.fetch(filepath, str(line))
-        note = Note(**entry)
+        note = Note(**entry.__dict__)
         with open(self._get_note_content_path(note.id), "r") as note_file:
             text = note_file.read()
 
@@ -61,7 +61,7 @@ class JsonFileRepository(BaseRepository):
         return NoteWithContent(note, content)
 
     def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:
-        existing_note: NoteWithContent = self.read(filepath, str(line))
+        existing_note: NoteWithContent = self.read(filepath, line)
         existing_note.note.username = note_with_content.note.username
         existing_note.note.email = note_with_content.note.email
         existing_note.note.filepath = note_with_content.note.filepath
@@ -96,7 +96,7 @@ class JsonFileRepository(BaseRepository):
         for item in items_to_prune:
             filepath, line = item.split(":")
             try:
-                self.delete(filepath, line)
+                self.delete(filepath, int(line))
             except NotterException:
                 pass
 

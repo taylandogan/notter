@@ -23,7 +23,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 @click.option("--init", is_flag=True, help="Initialize Notter tool.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
 @click.pass_context
-def cli(ctx, init, version) -> None:
+def cli(ctx: Context, init: bool, version: bool) -> None:
     src_path = os.getenv(SRC_PATH_VAR)
     if not src_path:
         click.secho(
@@ -94,7 +94,7 @@ def config(ctx: Context, get: Optional[str], setc: Optional[Tuple[str, str]], al
 
 @cli.command()
 @click.pass_context
-def destroy(ctx: Context):
+def destroy(ctx: Context) -> None:
     """Deletes configured Notter instance"""
     notter = ctx.obj.notter
     notter_path = notter.get_config(ncons.PATH)

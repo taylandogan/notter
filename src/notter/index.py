@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Optional
+from typing import Dict, Optional, Set
 
 from notter.exceptions import NoteAlreadyExists, NoteNotFound
 from notter.model import Note
@@ -11,7 +11,7 @@ NoteDict = Dict[FilePath, Dict[Line, Note]]
 
 
 class NoteIndex:
-    def __init__(self, index_path) -> None:
+    def __init__(self, index_path: str) -> None:
         self.idx: NoteDict = {}
         self.idx_path = index_path
 
@@ -41,8 +41,8 @@ class NoteIndex:
 
         return self.idx[filepath][line]
 
-    def summarize(self) -> set():
-        entry_set = set()
+    def summarize(self) -> Set[str]:
+        entry_set: Set[str] = set()
         for filepath, note_dict in self.idx.items():
             for line in note_dict.keys():
                 entry_set.add(f"{filepath}:{line}")

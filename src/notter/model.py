@@ -18,7 +18,7 @@ class Note:
     filepath: str
     line: int
     type: NoteType = NoteType.NOTE
-    id: Optional[str] = str(uuid.uuid4())
+    id: str = str(uuid.uuid4())
     created_at: Optional[str] = datetime.now().isoformat()
     updated_at: Optional[str] = datetime.now().isoformat()
 

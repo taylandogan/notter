@@ -13,7 +13,7 @@ class BaseExplorer:
     def __init__(self, notter: Notter):
         raise NotImplementedError
 
-    def discover(self) -> None:
+    def discover(self, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
 
 
@@ -34,7 +34,7 @@ class LexicalExplorer(BaseExplorer):
 
     @staticmethod
     def _discover_comments_in_file(filepath: str, tags: List[str]) -> List[Comment]:
-        comments = []
+        comments: List[Comment] = []
 
         with open(filepath, "r", encoding="utf-8") as file:
             file_content = file.read()
