@@ -10,7 +10,7 @@ setup(
     include_package_data=True,
     install_requires=["click", "pygments"],
     extras_require={
-        "dev": ["black", "flake8", "isort", "mypy"],
+        "dev": ["black", "flake8", "isort", "mypy", "coverage", "pytest"],
     },
     entry_points={
         "console_scripts": ["notter=notter.cli:cli"],

@@ -19,8 +19,8 @@ dependencies = ["click", "pygments"]
 
 [project.optional-dependencies]
 # TODO: Add minimum versions next to dev/test dependencies
-dev  = ["black", "flake8", "isort", "mypy"]
-test = [ "coverage"]
+dev  = ["black", "flake8", "isort", "mypy", "coverage", "pytest"]
+test = [ "coverage", "pytest"]
 
 [scripts]
 notter = "notter.cli:cli"
@@ -49,8 +49,15 @@ source = ["src"]
 relative_files = true
 branch = true
 omit = [
+  "reports/*",
 	"tests/*",
+  "src/notter/constants.py",
 ]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+asyncio_mode = "auto"
 
 (
   /(

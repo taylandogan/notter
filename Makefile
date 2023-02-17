@@ -3,6 +3,7 @@ PACKAGE_LOC:=src/$(PACKAGE_NAME)
 PYTHON:=python3.10
 VENV:=./venv
 PIP_VENV:=$(VENV)/bin/pip
+REPORT_DIR=./reports
 
 .PHONY: venv
 venv:
@@ -34,3 +35,10 @@ lint: format
 	mypy $(PACKAGE_LOC)
 	isort --diff --check $(PACKAGE_LOC)
 
+.PHONY: unittests
+unittests: venv_dev
+	PYTHONPATH=src coverage run -m pytest -sv tests --junitxml=$(REPORT_DIR)/junit.xml
+	coverage xml -i -o $(REPORT_DIR)/coverage.xml
+
+.PHONY: test
+test: lint unittests
