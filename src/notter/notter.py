@@ -51,7 +51,7 @@ class Notter:
             # TODO: Make sure it is not a critical path
             notter_path = self.get_config(ncons.PATH)
             rmtree(notter_path)
-            click.secho(f"Notter instance deleted", fg="green")
+            click.secho("Notter instance deleted", fg="green")
 
     def repr_config(self) -> str:
         repr = "Notter config:\n==============\n"

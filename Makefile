@@ -29,7 +29,8 @@ format: $(VENV_DEV)
 
 .PHONY: lint
 lint: format
+	black --diff --check $(PACKAGE_LOC)
 	flake8 $(PACKAGE_LOC)
 	mypy $(PACKAGE_LOC)
 	isort --diff --check $(PACKAGE_LOC)
-	black --diff --check $(PACKAGE_LOC)
+

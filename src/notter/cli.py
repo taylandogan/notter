@@ -27,7 +27,8 @@ def cli(ctx, init, version) -> None:
     src_path = os.getenv(SRC_PATH_VAR)
     if not src_path:
         click.secho(
-            f"Could not find the source folder. Please export your source folder as the environment variable: `{SRC_PATH_VAR}`",
+            f"Could not find the source folder. Please export your source \
+                folder as the environment variable: `{SRC_PATH_VAR}`",
             fg="red",
         )
         quit()
@@ -44,7 +45,7 @@ def cli(ctx, init, version) -> None:
     else:
         # TODO: Do not initialize if the Notter instance is already there
         # TODO: Separate/handle username & config properly
-        click.echo(f"Binding your Git user to Notter")
+        click.echo("Binding your Git user to Notter")
         username_process = subprocess.run(["git", "config", "user.name"], capture_output=True)
         email_process = subprocess.run(["git", "config", "user.email"], capture_output=True)
 
@@ -111,7 +112,7 @@ def destroy(ctx: Context):
 def create(ctx: Context, filepath: str, line: int, text: str, type: NoteType) -> None:
     try:
         ctx.obj.controller.create(filepath, line, text, type)
-        click.secho(f"Note created", fg="green")
+        click.secho("Note created", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
@@ -137,7 +138,7 @@ def read(ctx: Context, filepath: str, line: int) -> None:
 def update(ctx: Context, filepath: str, line: int, text: str, type: NoteType) -> None:
     try:
         ctx.obj.controller.update(filepath, line, text, type)
-        click.secho(f"Note updated", fg="green")
+        click.secho("Note updated", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
@@ -149,7 +150,7 @@ def update(ctx: Context, filepath: str, line: int, text: str, type: NoteType) ->
 def delete(ctx: Context, filepath: str, line: int) -> None:
     try:
         ctx.obj.controller.delete(filepath, line)
-        click.secho(f"Note deleted", fg="green")
+        click.secho("Note deleted", fg="green")
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
