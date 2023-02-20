@@ -19,7 +19,7 @@ dependencies = ["click", "pygments"]
 
 [project.optional-dependencies]
 # TODO: Add minimum versions next to dev/test dependencies
-dev  = ["black", "flake8", "isort", "mypy", "coverage", "pytest"]
+dev  = ["black", "flake8", "isort", "mypy", "coverage", "pytest", "pyinstaller"]
 test = [ "coverage", "pytest"]
 
 [scripts]

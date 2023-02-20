@@ -42,3 +42,7 @@ unittests: venv_dev
 
 .PHONY: test
 test: lint unittests
+
+.PHONY: bundle
+bundle: $(VENV)
+	pyinstaller install.py --name notter --onefile --copy-metadata notter
