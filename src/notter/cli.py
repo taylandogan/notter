@@ -19,6 +19,28 @@ SRC_PATH_VAR = "SRC_PATH"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
+def fetch_git_config() -> Tuple[str, str]:
+    click.echo("Binding your Git user to Notter")
+    username_process = subprocess.run(["git", "config", "user.name"], capture_output=True)
+    email_process = subprocess.run(["git", "config", "user.email"], capture_output=True)
+
+    if username_process.returncode != 0 or email_process.returncode != 0:
+        click.secho(
+            "Could not fetch your Git username/email, please make sure that `git config` command works.",
+            fg="red",
+        )
+        quit()
+
+    username = username_process.stdout.decode("utf-8").strip("\n")
+    email = email_process.stdout.decode("utf-8").strip("\n")
+    if not username or not email:
+        click.secho("Git username/email not configured properly.", fg="red")
+        quit()
+
+    click.secho(f"Using Git username: {username}", fg="yellow")
+    return username, email
+
+
 @click.group(invoke_without_command=True)
 @click.option("--init", is_flag=True, help="Initialize Notter tool.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
@@ -44,25 +66,7 @@ def cli(ctx: Context, init: bool, version: bool) -> None:
         notter.load(src_path)
     else:
         # TODO: Do not initialize if the Notter instance is already there
-        # TODO: Separate/handle username & config properly
-        click.echo("Binding your Git user to Notter")
-        username_process = subprocess.run(["git", "config", "user.name"], capture_output=True)
-        email_process = subprocess.run(["git", "config", "user.email"], capture_output=True)
-
-        if username_process.returncode != 0 or email_process.returncode != 0:
-            click.secho(
-                "Could not fetch your Git username/email, please make sure that `git config` command works.",
-                fg="red",
-            )
-            quit()
-
-        username = username_process.stdout.decode("utf-8").strip("\n")
-        email = email_process.stdout.decode("utf-8").strip("\n")
-        if not username or not email:
-            click.secho("Git username/email not configured properly.", fg="red")
-            quit()
-
-        click.secho(f"Using Git username: {username}", fg="yellow")
+        username, email = fetch_git_config()
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
         notter.set_config(ncons.USERNAME, username)
