@@ -3,7 +3,7 @@ from shutil import rmtree
 from typing import Any, Dict
 
 import click
-
+import sys
 import notter.constants as ncons
 from notter.utils import load_config, persist_config_after
 
@@ -40,7 +40,7 @@ class Notter:
         loaded_config = load_config(notter_config_file)
         if not loaded_config:
             click.secho("Could not load Notter configuration", fg="red")
-            quit()
+            sys.exit()
 
         self.config = loaded_config
 
