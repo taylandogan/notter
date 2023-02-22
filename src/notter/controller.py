@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 
 import notter.constants as ncons
@@ -18,7 +19,7 @@ class NoteController:
         username = self.notter.get_config(ncons.USERNAME)
         email = self.notter.get_config(ncons.EMAIL)
         # TODO: Add input validation, max number of characters for each field
-        note = Note(username, email, filepath, line, type)
+        note = Note(str(uuid.uuid4()), username, email, filepath, line, type)
         content = Content(text)
         return NoteWithContent(note, content)
 

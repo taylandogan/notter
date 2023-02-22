@@ -30,7 +30,7 @@ def persist_config_after(function):
         with open(config_file, "w+") as file:
             json.dump(self.config, file, indent=4)
 
-        click.secho("Notter config updated", fg="green")
+        # click.secho("Notter config updated", fg="green")
         return retval
 
     return wrapper
@@ -43,7 +43,7 @@ def persist_index_after(function):
         with open(self.idx_path, "w") as idx_file:
             json.dump(self.idx, idx_file, cls=CustomEncoder, indent=4)
 
-        click.secho("Notter index updated", fg="green")
+        # click.secho("Notter index updated", fg="green")
         return retval
 
     return wrapper

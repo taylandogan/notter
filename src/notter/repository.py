@@ -53,7 +53,7 @@ class JsonFileRepository(BaseRepository):
 
     def read(self, filepath: str, line: int) -> NoteWithContent:
         entry = self.note_index.fetch(filepath, str(line))
-        note = Note(**entry.__dict__)
+        note = Note(**entry)
         with open(self._get_note_content_path(note.id), "r") as note_file:
             text = note_file.read()
 

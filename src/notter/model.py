@@ -1,4 +1,3 @@
-import uuid
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -13,12 +12,12 @@ class NoteType(str, Enum):
 # TODO: Add input validation, max number of characters for each field
 @dataclass
 class Note:
+    id: str
     username: str
     email: str
     filepath: str
     line: int
     type: NoteType = NoteType.NOTE
-    id: str = str(uuid.uuid4())
     created_at: Optional[str] = datetime.now().isoformat()
     updated_at: Optional[str] = datetime.now().isoformat()
 
