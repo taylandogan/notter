@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 import sys
 from importlib.metadata import version as pkg_version
 from pathlib import Path
@@ -20,32 +19,11 @@ SRC_PATH_VAR = "SRC_PATH"
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
-def fetch_git_config() -> Tuple[str, str]:
-    username_process = subprocess.run(["git", "config", "user.name"], capture_output=True)
-    email_process = subprocess.run(["git", "config", "user.email"], capture_output=True)
-
-    if username_process.returncode != 0 or email_process.returncode != 0:
-        click.secho(
-            "Could not fetch your Git username/email, please make sure that `git config` command works.",
-            fg="red",
-        )
-        sys.exit(1)
-
-    username = username_process.stdout.decode("utf-8").strip("\n")
-    email = email_process.stdout.decode("utf-8").strip("\n")
-    if not username or not email:
-        click.secho("Git username/email not configured properly.", fg="red")
-        sys.exit(1)
-
-    click.secho(f"Using Git username: {username}", fg="yellow")
-    return username, email
-
-
 @click.group(invoke_without_command=True)
-@click.option("--init", is_flag=True, help="Initialize Notter tool.")
+@click.option("--init", nargs=2, type=str, help="Initialize Notter tool with a username & email.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
 @click.pass_context
-def cli(ctx: Context, init: bool, version: bool) -> None:
+def cli(ctx: Context, init: Tuple[str, str], version: bool) -> None:
     src_path = os.getenv(SRC_PATH_VAR)
     if not src_path:
         click.secho(
@@ -65,7 +43,7 @@ def cli(ctx: Context, init: bool, version: bool) -> None:
         notter.load(src_path)
     else:
         # TODO: Do not initialize if the Notter instance is already there
-        username, email = fetch_git_config()
+        username, email = init
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
         notter.set_config(ncons.USERNAME, username)

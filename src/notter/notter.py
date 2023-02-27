@@ -1,9 +1,10 @@
+import sys
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Dict
 
 import click
-import sys
+
 import notter.constants as ncons
 from notter.utils import load_config, persist_config_after
 
