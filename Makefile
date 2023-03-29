@@ -1,6 +1,6 @@
 PACKAGE_NAME:=notter
 PACKAGE_LOC:=src/$(PACKAGE_NAME)
-PYTHON:=python3.10
+PYTHON:=python3.11
 VENV:=./venv
 PIP_VENV:=$(VENV)/bin/pip
 REPORT_DIR=./reports

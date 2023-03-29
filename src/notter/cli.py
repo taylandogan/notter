@@ -27,7 +27,8 @@ def cli(ctx: Context, init: Tuple[str, str], version: bool) -> None:
     src_path = os.getenv(SRC_PATH_VAR)
     if not src_path:
         click.secho(
-            f"Could not find the source folder. Please export your source folder as the environment variable: `{SRC_PATH_VAR}`",
+            f"Could not find the source folder.\
+            Please export your source folder as the environment variable: `{SRC_PATH_VAR}`",
             fg="red",
         )
         sys.exit(1)
