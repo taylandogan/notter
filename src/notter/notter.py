@@ -17,18 +17,18 @@ class Notter:
 
     @persist_config_after
     def configure(self, src_folder: Path) -> None:
-        self.path = src_folder.parent / ".notter"
-        self.config[ncons.CONFIG_PATH] = str(self.path / ncons.CONFIG_FILENAME)
+        path = src_folder.parent / ".notter"
+        self.config[ncons.CONFIG_PATH] = str(path / ncons.CONFIG_FILENAME)
         self.config[ncons.SRC_PATH] = str(src_folder)
-        self.config[ncons.PATH] = str(self.path)
-        self.config[ncons.NOTES_PATH] = str(self.path / ncons.NOTES_DIRNAME)
+        self.config[ncons.PATH] = str(path)
+        self.config[ncons.NOTES_PATH] = str(path / ncons.NOTES_DIRNAME)
         self.init_notter_folders()
 
     def init_notter_folders(self) -> None:
         if self.get_config(ncons.INITIALIZED_FLAG):
-            click.secho(f"Notter folders found at location: {self.path}", fg="red")
+            click.secho(f"Notter folders found at location: {self.config[ncons.PATH]}", fg="red")
         else:
-            click.secho(f"Creating Notter folders at location: {self.path}", fg="yellow")
+            click.secho(f"Creating Notter folders at location: {self.config[ncons.PATH]}", fg="yellow")
             Path(self.get_config(ncons.PATH)).mkdir(parents=True, exist_ok=True)
             Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
             self.set_config(ncons.INITIALIZED_FLAG, True)
