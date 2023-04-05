@@ -7,6 +7,7 @@ from notter.explorer import LexicalExplorer
 from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
 from notter.repository import JsonFileRepository
+from notter.utils import convert_to_local_path
 
 
 class NoteController:
@@ -16,6 +17,8 @@ class NoteController:
         self.explorer = LexicalExplorer(self.notter)
 
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
+        src_folder = self.notter.get_config(ncons.SRC_PATH)
+        filepath = convert_to_local_path(filepath, src_folder)
         username = self.notter.get_config(ncons.USERNAME)
         email = self.notter.get_config(ncons.EMAIL)
         # TODO: Add input validation, max number of characters for each field
