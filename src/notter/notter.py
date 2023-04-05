@@ -35,8 +35,7 @@ class Notter:
 
     def load(self, src_folder: str) -> None:
         src_path = Path(src_folder).resolve()
-        parent_path = src_path.parent
-        notter_path = parent_path / ".notter"
+        notter_path = src_path.parent / ".notter"
         notter_config_file = str(notter_path / ncons.CONFIG_FILENAME)
         loaded_config = load_config(notter_config_file)
         if not loaded_config:
