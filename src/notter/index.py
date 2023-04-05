@@ -1,5 +1,6 @@
 import json
-from typing import Dict, Optional, Set
+from dataclasses import asdict
+from typing import Any, Dict, Optional, Set
 
 from notter.exceptions import NoteAlreadyExists, NoteNotFound
 from notter.model import Note
@@ -7,7 +8,8 @@ from notter.utils import CustomEncoder, persist_index_after
 
 Line = str
 FilePath = str
-NoteDict = Dict[FilePath, Dict[Line, Note]]
+NoteEntry = Dict[str, Any]
+NoteDict = Dict[FilePath, Dict[Line, NoteEntry]]
 
 
 class NoteIndex:
@@ -57,7 +59,7 @@ class NoteIndex:
             raise NoteAlreadyExists
 
         self.idx[note.filepath] = self.idx.get(note.filepath, {})
-        self.idx[note.filepath][str(note.line)] = note
+        self.idx[note.filepath][str(note.line)] = asdict(note)
 
     @persist_index_after
     def clean(self, filepath: str, line: str) -> Optional[Note]:

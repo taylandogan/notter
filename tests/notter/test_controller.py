@@ -2,7 +2,7 @@ from pathlib import Path
 
 import notter.constants as ncons
 
-from unittest.mock import MagicMock, call, patch
+from unittest.mock import MagicMock, call
 from notter.controller import NoteController
 from notter.exceptions import NoteAlreadyExists
 from notter.model import Comment, NoteWithContent
