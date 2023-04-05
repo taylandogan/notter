@@ -7,7 +7,6 @@ from pytest import fixture
 from notter.controller import NoteController
 
 from notter.notter import Notter
-from notter.repository import JsonFileRepository
 
 
 @fixture

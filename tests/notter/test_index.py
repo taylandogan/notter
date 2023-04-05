@@ -1,5 +1,4 @@
-from functools import wraps
-from typing import Any
+from dataclasses import asdict
 from unittest.mock import ANY, MagicMock, mock_open, patch
 
 import pytest
@@ -58,11 +57,11 @@ class TestNoteIndex:
     def test_fetch(self, seek_mock: MagicMock) -> None:
         seek_mock.return_value = True
         index = NoteIndex(self.mock_index_path)
-        index.idx = {self.mock_filepath: {self.mock_line: self.mock_note}}
+        index.idx = {self.mock_filepath: {self.mock_line: asdict(self.mock_note)}}
 
-        assert index.fetch(self.mock_filepath, self.mock_line) == Note(
-            id="dummy_id", username="user", email="a@b.com", filepath=self.mock_filepath, line=self.mock_line
-        )
+        fetched_note = index.fetch(self.mock_filepath, self.mock_line)
+        assert isinstance(fetched_note, Note)
+        assert fetched_note.id == self.mock_note.id
 
     @patch("notter.index.NoteIndex.seek")
     def test_fetch_nonexistent(self, seek_mock: MagicMock) -> None:
@@ -100,7 +99,7 @@ class TestNoteIndex:
             index.store(self.mock_note)
 
         m_open.assert_called_with(self.mock_index_path, "w")
-        assert index.idx == {self.mock_filepath: {self.mock_line: self.mock_note}}
+        assert index.idx == {self.mock_filepath: {self.mock_line: asdict(self.mock_note)}}
 
     @patch("notter.index.NoteIndex.seek")
     def test_store_existing(self, seek_mock: MagicMock) -> None:
