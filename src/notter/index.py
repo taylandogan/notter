@@ -39,7 +39,7 @@ class NoteIndex:
         if not note_exists:
             raise NoteNotFound
 
-        note_dict: Note = self.idx[filepath][line]
+        note_dict = Note(**self.idx[filepath][line])
         return note_dict
 
     def summarize(self) -> Set[str]:
