@@ -7,6 +7,7 @@ from notter.exceptions import NotterException
 from notter.index import NoteIndex
 from notter.model import Comment, Content, Note, NoteWithContent
 from notter.notter import Notter
+from notter.utils import convert_to_local_path
 
 
 class BaseRepository:
@@ -91,7 +92,8 @@ class JsonFileRepository(BaseRepository):
     def prune(self, comments: List[Comment]) -> List[str]:
         comments_set = set()
         for comment in comments:
-            comments_set.add(f"{comment.filepath}:{comment.line}")
+            filepath = convert_to_local_path(comment.filepath, self.notter.get_config(ncons.SRC_PATH))
+            comments_set.add(f"{filepath}:{comment.line}")
 
         entry_set = self.note_index.summarize()
         items_to_prune = list(entry_set.difference(comments_set))

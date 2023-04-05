@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import notter.constants as ncons
+
 from unittest.mock import MagicMock, call, patch
 from notter.controller import NoteController
 from notter.exceptions import NoteAlreadyExists
@@ -6,7 +10,8 @@ from notter.model import Comment, NoteWithContent
 
 class TestNoteController:
     def test_create_note_with_content(self, note_controller: NoteController) -> None:
-        note_with_content = note_controller._create_note_with_content("path/to/file.py", 1, "This is a test", "NOTE")
+        file_path = Path(note_controller.notter.get_config(ncons.SRC_PATH)) / "path/to/file.py"
+        note_with_content = note_controller._create_note_with_content(str(file_path), 1, "This is a test", "NOTE")
 
         assert note_with_content.note.filepath == "path/to/file.py"
         assert note_with_content.note.line == 1
