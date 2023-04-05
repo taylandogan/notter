@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import notter.constants as ncons
 from notter.exceptions import NotterException
@@ -52,8 +52,8 @@ class JsonFileRepository(BaseRepository):
             note_file.write(note_with_content.content.text)
 
     def read(self, filepath: str, line: int) -> NoteWithContent:
-        entry = self.note_index.fetch(filepath, str(line))
-        note = Note(**entry)
+        note: Note = self.note_index.fetch(filepath, str(line))
+
         with open(self._get_note_content_path(note.id), "r") as note_file:
             text = note_file.read()
 
@@ -80,8 +80,10 @@ class JsonFileRepository(BaseRepository):
     def delete(self, filepath: str, line: int) -> None:
         # TODO: Make these two operations atomic
         # Update the index
-        entry = self.note_index.clean(filepath, str(line))
-        note = Note(**entry)
+        note: Optional[Note] = self.note_index.clean(filepath, str(line))
+        if not note:
+            return
+
         note_path = self._get_note_content_path(note.id)
         # Remove note content
         Path(note_path).unlink()

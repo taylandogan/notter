@@ -34,12 +34,13 @@ class NoteIndex:
 
         return True
 
-    def fetch(self, filepath: str, line: str) -> Optional[Note]:
+    def fetch(self, filepath: str, line: str) -> Note:
         note_exists = self.seek(filepath, line)
         if not note_exists:
             raise NoteNotFound
 
-        return self.idx[filepath][line]
+        note_dict: Note = self.idx[filepath][line]
+        return note_dict
 
     def summarize(self) -> Set[str]:
         entry_set: Set[str] = set()
@@ -51,7 +52,7 @@ class NoteIndex:
 
     @persist_index_after
     def store(self, note: Note, update: bool = False) -> None:
-        note_exists = self.seek(note.filepath, str(note.line))
+        note_exists: bool = self.seek(note.filepath, str(note.line))
         if not update and note_exists:
             raise NoteAlreadyExists
 
@@ -60,7 +61,11 @@ class NoteIndex:
 
     @persist_index_after
     def clean(self, filepath: str, line: str) -> Optional[Note]:
-        note = self.fetch(filepath, line)
+        try:
+            note: Note = self.fetch(filepath, line)
+        except NoteNotFound:
+            return None
+
         file_entry = self.idx[filepath]
         file_entry.pop(line)
 
