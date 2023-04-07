@@ -1,6 +1,11 @@
 name: Run Tests
 
 on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Triggered by:"
+        default: "taylandogan"
   push:
     branches:
       - master
