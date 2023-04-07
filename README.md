@@ -15,7 +15,7 @@ Notter requires Python >= 3.10 and it could be installed via pip.
    ```
 
 If you'd like to contribute to Notter, please check the `Makefile`, it is a good point to start. You can fork & clone this repo and run `make venv_dev` command to install it locally with dev dependencies. Then you can run tests and check if everything is okay by running the following command: `make format test`
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 <hr>
 
 
@@ -84,7 +84,7 @@ $ notter --version
 ```
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 <hr>
 
 ## Roadmap
@@ -107,9 +107,9 @@ Both comments and todos are reffered as "notes".
 - [ ] Change username/email
 
 See the [open issues](https://github.com/taylandogan/notter/issues) for a full list of proposed features (and known issues).
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 <hr>
 
 ## License
 See `LICENSE.md` for more information.
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
