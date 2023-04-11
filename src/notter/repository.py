@@ -87,7 +87,7 @@ class JsonFileRepository(BaseRepository):
 
         note_path = self._get_note_content_path(note.id)
         # Remove note content
-        Path(note_path).unlink()
+        Path(note_path).unlink(missing_ok=True)
 
     def prune(self, comments: List[Comment]) -> List[str]:
         comments_set = set()
