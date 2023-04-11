@@ -1,5 +1,12 @@
 # notter
 <!-- /// Github badges go here -->
+![3.10](https://img.shields.io/github/actions/workflow/status/taylandogan/notter/tests.yml?branch=master&event=push&matrix.python-version=3.10&label=python3.10)
+![3.11](https://img.shields.io/github/actions/workflow/status/taylandogan/notter/tests.yml?branch=master&event=push&matrix.python-version=3.11&label=python3.11)
+![PyPI version](https://img.shields.io/pypi/v/notter?color=blue&label=version&logoColor=red)
+[![License: MIT](https://img.shields.io/github/license/taylandogan/notter?color=yellow)](https://opensource.org/licenses/MIT)
+![Downloads](https://img.shields.io/pypi/dm/notter?color=red)
+![sponsors](https://img.shields.io/github/sponsors/taylandogan?color=teal)
+
 
 <b>A simple tool with a CLI that enables you to manage your comments and todos in a codebase.</b>
 
