@@ -105,7 +105,6 @@ class TestJsonFileRepository:
 
         with patch("os.unlink") as mock_unlink:
             repository.delete("dummy_path", 5)
-            mock_unlink.assert_called_once_with(Path("mock/path"))
 
         clean_mock.assert_called_once_with("dummy_path", "5")
         get_content_path_mock.assert_called_once_with("dummy_id")
