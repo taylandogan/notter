@@ -14,6 +14,7 @@ class Notter:
         self.config: Dict[str, Any] = {}
         self.config[ncons.INITIALIZED_FLAG] = False
         self.config[ncons.IDX_INITIALIZED_FLAG] = False
+        self.config[ncons.DB_INITIALIZED_FLAG] = False
 
     @persist_config_after
     def configure(self, src_folder: Path) -> None:
