@@ -6,14 +6,15 @@ from notter.exceptions import NoteAlreadyExists
 from notter.explorer import LexicalExplorer
 from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
-from notter.repository import JsonFileRepository
+from notter.repository import SQLiteRepository
 from notter.utils import convert_to_local_path
 
 
 class NoteController:
     def __init__(self, notter: Notter):
         self.notter = notter
-        self.repository = JsonFileRepository(self.notter)
+        # TODO: Give user the option to pick repository type
+        self.repository = SQLiteRepository(self.notter)
         self.explorer = LexicalExplorer(self.notter)
 
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
