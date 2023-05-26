@@ -113,6 +113,17 @@ def read(ctx: Context, filepath: str, line: int) -> None:
 
 @cli.command()
 @click.argument("filepath", type=str)
+@pass_context
+def read_file(ctx: Context, filepath: str) -> None:
+    try:
+        note = ctx.obj.controller.read_file(filepath)
+        click.echo(note)
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
+
+
+@cli.command()
+@click.argument("filepath", type=str)
 @click.argument("line", type=int)
 @click.argument("text", type=str)
 @click.argument("type", type=NoteType)

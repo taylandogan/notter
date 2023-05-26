@@ -33,6 +33,12 @@ class TestNoteController:
 
         note_controller.repository.read.assert_called_once_with("path/to/file.py", 1)
 
+    def test_read_file(self, note_controller: NoteController) -> None:
+        note_controller.repository = MagicMock()
+        note_controller.read_file("path/to/file.py")
+
+        note_controller.repository.read_file.assert_called_once_with("path/to/file.py")
+
     def test_update(self, note_controller: NoteController) -> None:
         mock_note = "pikachu"
         note_controller.repository = MagicMock()
