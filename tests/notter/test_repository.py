@@ -181,6 +181,19 @@ class TestSQLiteRepository:
         assert return_val == [note_with_content]
 
     @patch("notter.repository.DatabaseManager")
+    def test_read_user_notes(self, mock_db_manager: MagicMock, note_with_content: NoteWithContent) -> None:
+        notter_with_config = Notter()
+        notter_with_config.configure(self.mock_src_folder)
+        repository = SQLiteRepository(notter_with_config)
+        mock_db_manager.get_by_username.return_value = [note_with_content]
+        repository.db_manager = mock_db_manager
+
+        return_val = repository.read_user_notes("pikachu")
+
+        repository.db_manager.get_by_username.assert_called_once_with("pikachu")
+        assert return_val == [note_with_content]
+
+    @patch("notter.repository.DatabaseManager")
     def test_update(self, mock_db_manager: MagicMock, note_with_content: NoteWithContent) -> None:
         notter_with_config = Notter()
         notter_with_config.configure(self.mock_src_folder)

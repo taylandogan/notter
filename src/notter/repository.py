@@ -134,6 +134,9 @@ class SQLiteRepository(BaseRepository):
     def read_file(self, filepath: str) -> List[NoteWithContent]:
         return self.db_manager.get_by_filepath(filepath)
 
+    def read_user_notes(self, username: str) -> List[NoteWithContent]:
+        return self.db_manager.get_by_username(username)
+
     def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:
         self.db_manager.update(filepath, line, note_with_content)
 
