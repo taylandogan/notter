@@ -40,6 +40,9 @@ class NoteController:
     def read_user_notes(self, username: str) -> List[NoteWithContent]:
         return self.repository.read_user_notes(username)
 
+    def search_note_with_content(self, content: str) -> List[NoteWithContent]:
+        return self.repository.search(content)
+
     def update(self, filepath: str, line: int, text: str, type: NoteType = NoteType.NOTE) -> None:
         note_with_content = self._create_note_with_content(filepath, line, text, type)
         self.repository.update(filepath, line, note_with_content)

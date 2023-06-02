@@ -45,6 +45,12 @@ class TestNoteController:
 
         note_controller.repository.read_user_notes.assert_called_once_with("pikachu")
 
+    def test_search_note_with_content(self, note_controller: NoteController) -> None:
+        note_controller.repository = MagicMock()
+        note_controller.search_note_with_content("test")
+
+        note_controller.repository.search.assert_called_once_with("test")
+
     def test_update(self, note_controller: NoteController) -> None:
         mock_note = "pikachu"
         note_controller.repository = MagicMock()

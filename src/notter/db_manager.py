@@ -90,6 +90,6 @@ class DatabaseManager:
         cursor = self.run_statement(sql_statements.GET_NOTE_BY_USERNAME, (username,), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]
 
-    def search_by_content(self, content: str) -> List[NoteWithContent]:
-        cursor = self.run_statement(sql_statements.SEARCH_NOTES_WITH_CONTENT, (content,), True)
+    def search(self, content: str) -> List[NoteWithContent]:
+        cursor = self.run_statement(sql_statements.SEARCH_NOTES_WITH_CONTENT, (f"%{content}%",), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]

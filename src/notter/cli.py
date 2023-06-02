@@ -134,6 +134,17 @@ def read_user_notes(ctx: Context, username: str) -> None:
 
 
 @cli.command()
+@click.argument("content", type=str)
+@pass_context
+def search(ctx: Context, content: str) -> None:
+    try:
+        note = ctx.obj.controller.search_note_with_content(content)
+        click.echo(note)
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
+
+
+@cli.command()
 @click.argument("filepath", type=str)
 @click.argument("line", type=int)
 @click.argument("text", type=str)
