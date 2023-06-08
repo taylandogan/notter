@@ -13,7 +13,6 @@ from notter.utils import convert_to_local_path
 class NoteController:
     def __init__(self, notter: Notter):
         self.notter = notter
-        # TODO: Give user the option to pick repository type
         self.repository = SQLiteRepository(self.notter)
         self.explorer = LexicalExplorer(self.notter)
 

@@ -36,11 +36,9 @@ Notter requires this because it creates a `.notter` folder on the same level and
 my_project
 ├── .notter                    ┐
 │   ├── config.json            │  Notter config file
-│   ├── idx_notes.json         ┘  Notter index file
-│   └── notes                  ┐
-│         ├── content1         │  Notter content files
-│         ├── content2         │  (comments / todos)
-│         └── ...              ┘
+│   │                          │
+│   └── notes.db               ┘  Notter database
+│
 ├── src                        ┐
 │   └── myPackage              │
 │       ├── __init__.py        │ Project source code
@@ -57,11 +55,9 @@ To initialize Notter in a codebase, after exporting `SRC_PATH`, run the command 
 $ notter --init [USERNAME] [EMAIL]
 ```
 
-One of the core ideas of Notter is to separate metadata from the actual content. Thus, Notter keeps metadata in an inverted index structure, which is implemented as a nested Python dict where the keys are partial filepaths and line numbers.
-
 ### Discover
 
-Once you initialized your Notter instance for the codebase, you can run the discover command to explore the codebase and extract all the comments/todos. This command populates the aforementioned index structure, creates the content files and prints the found comments/todos in JSON format. Thus, it can create a big diff.
+Once you initialized your Notter instance for the codebase, you can run the discover command to explore the codebase and extract all the comments/todos. This command populates the notes database (notes.db in the folder structure above), creates the content files and prints the found comments/todos in JSON format. Thus, it can create a big diff.
 
 ```sh
 $ notter discover
@@ -73,7 +69,7 @@ $ notter discover | python -m json.tool
 ```
 
 ### CRUD operations
-You can create, read, update and delete comments/todos from the Notter index using the following commands. Note that these commands do not actually touch your source code and only update your Notter instance and its index. (Thus, running these commands without actually doing the changes in the source code would create inconsistencies in your Notter instance. But you can always use the discover command above to reset it.)
+You can create, read, update and delete comments/todos from the Notter database using the following commands. Note that these commands do not actually touch your source code and only update your Notter instance and its database. (Thus, running these commands without actually doing the changes in the source code would create inconsistencies in your Notter instance. But you can always use the discover command above to reset it.)
 
 ```sh
 $ notter create [FILEPATH] [LINE] [CONTENT] [TYPE]
@@ -100,8 +96,8 @@ Both comments and todos are reffered as "notes".
 - [x] Notter instance/index structure
 - [x] Detect notes in Python codebases
 - [x] CRUD functionality for notes
-- [ ] Fetch notes of a given file
-- [ ] Fetch notes including a given keyword
+- [x] Fetch notes of a given file
+- [x] Fetch notes including a given keyword
 - [ ] Add attributes to notes (priority, reminder, etc.)
 - [ ] Auto-prioritization based on attributes
 - [ ] Fetch notes with a given attribute

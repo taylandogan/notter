@@ -12,7 +12,6 @@ class TestNotter:
         notter = Notter()
 
         assert notter.config.get("initialized") is False
-        assert notter.config.get("idx_initialized") is False
 
     def test_notter_init(self) -> None:
         notter = Notter()

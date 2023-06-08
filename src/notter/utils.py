@@ -43,16 +43,3 @@ def persist_config_after(function):
         return retval
 
     return wrapper
-
-
-def persist_index_after(function):
-    def wrapper(self, *args, **kwargs):
-        retval = function(self, *args, **kwargs)
-
-        with open(self.idx_path, "w") as idx_file:
-            json.dump(self.idx, idx_file, cls=CustomEncoder, indent=4)
-
-        # click.secho("Notter index updated", fg="green")
-        return retval
-
-    return wrapper
