@@ -138,8 +138,8 @@ def read_user_notes(ctx: Context, username: str) -> None:
 @pass_context
 def search(ctx: Context, content: str) -> None:
     try:
-        note = ctx.obj.controller.search_note_with_content(content)
-        click.echo(note)
+        notes = ctx.obj.controller.search_note_with_content(content)
+        click.echo(json.dumps(notes, default=lambda o: o.__dict__))
     except NotterException as exc:
         click.secho(exc.message, fg="red")
 
