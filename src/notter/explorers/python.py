@@ -17,16 +17,13 @@ class PythonExplorer(LexicalExplorer):
             if token_type == tokenize.COMMENT:
                 token_content = token_content[1:]
 
-                is_todo = False
-                for tag in tags:
-                    if tag in token_content.lower():
-                        is_todo = True
+                note_type = LexicalExplorer.determine_note_type(token_content, tags)
+                is_todo = True if note_type == NoteType.TODO else False
 
                 if comments and token_start[0] == (comments[-1].line + 1) and not is_todo:
                     comments[-1].text += f"\n{token_content}"
                     comments[-1].multiline = True
                 else:
-                    note_type = NoteType.TODO if is_todo else NoteType.NOTE
                     comments.append(Comment(filepath, token_content, token_start[0], note_type))
 
         return comments

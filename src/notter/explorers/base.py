@@ -8,7 +8,7 @@ import aiofiles
 
 import notter.constants as ncons
 from notter.explorers.registry import registry
-from notter.model import Comment
+from notter.model import Comment, NoteType
 from notter.notter import Notter
 
 
@@ -76,3 +76,9 @@ class LexicalExplorer(BaseExplorer):
 
     def _discover_comments_in_file(self, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
+
+    @staticmethod
+    def determine_note_type(text: str, tags: List[str]) -> NoteType:
+        text = text.lower()
+        tags = [tag.lower() for tag in tags]
+        return NoteType.TODO if any(tag in text for tag in tags) else NoteType.NOTE
