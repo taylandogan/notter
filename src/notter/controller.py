@@ -3,7 +3,7 @@ from typing import List
 
 import notter.constants as ncons
 from notter.exceptions import NoteAlreadyExists
-from notter.explorer import LexicalExplorer
+from notter.explorers.base import LexicalExplorer
 from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
 from notter.repository import SQLiteRepository
