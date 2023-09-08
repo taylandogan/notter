@@ -49,8 +49,8 @@ class NoteController:
     def delete(self, filepath: str, line: int) -> None:
         self.repository.delete(filepath, line)
 
-    def discover(self, tags: List[str], save_as_notter_notes: bool = True) -> List[Comment]:
-        comments: List[Comment] = self.explorer.discover(tags)
+    async def discover(self, tags: List[str], save_as_notter_notes: bool = True) -> List[Comment]:
+        comments: List[Comment] = await self.explorer.discover(tags)
 
         if save_as_notter_notes:
             for comment in comments:

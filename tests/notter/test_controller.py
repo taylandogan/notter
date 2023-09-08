@@ -65,7 +65,7 @@ class TestNoteController:
 
         note_controller.repository.delete.assert_called_once_with("path/to/file.py", 1)
 
-    def test_discover(self, note_controller: NoteController) -> None:
+    async def test_discover(self, note_controller: NoteController) -> None:
         mock_comments = [
             Comment("path/to/file.py", "This is a note", 1, "NOTE"),
             Comment("path/to/file.py", "This is a todo", 2, "TODO"),
@@ -75,7 +75,7 @@ class TestNoteController:
         note_controller.repository = MagicMock()
         note_controller.explorer = MagicMock(discover=MagicMock(return_value=mock_comments))
 
-        comments = note_controller.discover(["tag1", "tag2"])
+        comments = await note_controller.discover(["tag1", "tag2"])
 
         assert comments == mock_comments
         note_controller.repository.prune.assert_called_once_with(mock_comments)
@@ -83,7 +83,7 @@ class TestNoteController:
             [call("path/to/file.py", 1, "This is a note", "NOTE"), call("path/to/file.py", 2, "This is a todo", "TODO")]
         )
 
-    def test_discover_no_save(self, note_controller: NoteController) -> None:
+    async def test_discover_no_save(self, note_controller: NoteController) -> None:
         mock_comments = [
             Comment("path/to/file.py", "This is a note", 1, "NOTE"),
             Comment("path/to/file.py", "This is a todo", 2, "TODO"),
@@ -93,44 +93,44 @@ class TestNoteController:
         note_controller.repository = MagicMock()
         note_controller.explorer = MagicMock(discover=MagicMock(return_value=mock_comments))
 
-        comments = note_controller.discover(["tag1", "tag2"], save_as_notter_notes=False)
+        comments = await note_controller.discover(["tag1", "tag2"], save_as_notter_notes=False)
 
         assert comments == mock_comments
         note_controller.repository.prune.assert_called_once_with(mock_comments)
         note_controller.create.assert_not_called()
 
-    def test_discover_duplicate_comment(self, note_controller: NoteController) -> None:
+    async def test_discover_duplicate_comment(self, note_controller: NoteController) -> None:
         mock_comments = [Comment("path/to/file.py", "This is a note", 1, "NOTE")]
         note_controller.create = MagicMock()
         note_controller.create.side_effect = NoteAlreadyExists
         note_controller.repository = MagicMock()
         note_controller.explorer = MagicMock(discover=MagicMock(return_value=mock_comments))
 
-        comments = note_controller.discover(["tag1", "tag2"])
+        comments = await note_controller.discover(["tag1", "tag2"])
 
         assert comments == mock_comments
         note_controller.repository.prune.assert_called_once_with(mock_comments)
         note_controller.create.assert_called_once_with("path/to/file.py", 1, "This is a note", "NOTE")
 
-    def test_discover_no_comments(self, note_controller: NoteController) -> None:
+    async def test_discover_no_comments(self, note_controller: NoteController) -> None:
         mock_comments = []
         note_controller.create = MagicMock()
         note_controller.repository = MagicMock()
         note_controller.explorer = MagicMock(discover=MagicMock(return_value=mock_comments))
 
-        comments = note_controller.discover(["tag1", "tag2"])
+        comments = await note_controller.discover(["tag1", "tag2"])
 
         assert comments == mock_comments
         note_controller.repository.prune.assert_called_once_with(mock_comments)
         note_controller.create.assert_not_called()
 
-    def test_discover_no_tags(self, note_controller: NoteController) -> None:
+    async def test_discover_no_tags(self, note_controller: NoteController) -> None:
         mock_comments = []
         note_controller.create = MagicMock()
         note_controller.repository = MagicMock()
         note_controller.explorer = MagicMock(discover=MagicMock(return_value=mock_comments))
 
-        comments = note_controller.discover([])
+        comments = await note_controller.discover([])
 
         assert comments == mock_comments
         note_controller.repository.prune.assert_called_once_with(mock_comments)

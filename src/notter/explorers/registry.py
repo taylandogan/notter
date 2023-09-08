@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
-
 registry = {}
+
 
 def register_explorer(extension: str) -> Callable[..., Any]:
     def wrapper(explorer_cls: Any) -> Any:

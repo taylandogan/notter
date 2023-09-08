@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import sys
@@ -176,7 +177,8 @@ def discover(ctx: Context) -> None:
     try:
         # TODO: Retrieve tags from user
         tags = ["TODO", "FIXME"]
-        comments = ctx.obj.controller.discover(tags)
+        loop = asyncio.get_event_loop()
+        comments = loop.run_until_complete(ctx.obj.controller.discover(tags))
         click.echo(json.dumps(comments, default=lambda o: o.__dict__))
     except NotterException as exc:
         click.secho(exc.message, fg="red")

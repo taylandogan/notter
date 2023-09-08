@@ -15,11 +15,11 @@ requires-python = ">=3.10"
 keywords = ["notes", "todos", "tracking", "index"]
 
 # Requirements
-dependencies = ["click", "pygments"]
+dependencies = ["click", "pygments", "aiofiles"]
 
 [project.optional-dependencies]
 # TODO: Add minimum versions next to dev/test dependencies
-dev  = ["black", "flake8", "isort", "mypy", "coverage", "pytest", "pyinstaller"]
+dev  = ["black", "flake8", "isort", "mypy", "coverage", "pytest", "pyinstaller", "types-aiofiles"]
 test = [ "coverage", "pytest"]
 
 [scripts]

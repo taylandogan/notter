@@ -1,18 +1,22 @@
+import asyncio
 import os
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Dict, List
 
+import aiofiles
+
 import notter.constants as ncons
+from notter.explorers.registry import registry
 from notter.model import Comment
 from notter.notter import Notter
-from notter.explorers.registry import registry
 
 
 class BaseExplorer:
     def __init__(self, notter: Notter):
         raise NotImplementedError
 
-    def discover(self, tags: List[str]) -> List[Comment]:
+    async def discover(self, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
 
 
@@ -21,7 +25,7 @@ class LexicalExplorer(BaseExplorer):
         self.notter = notter
         self.source_path = notter.get_config(ncons.SRC_PATH)
 
-    def discover(self, tags: List[str]) -> List[Comment]:
+    async def discover(self, tags: List[str]) -> List[Comment]:
         comments = []
         tags = [tag.lower() for tag in tags]
 
@@ -33,10 +37,30 @@ class LexicalExplorer(BaseExplorer):
             explorer_class = registry.get(ext)
             if explorer_class:
                 explorer = explorer_class(self.notter)
-                for file in files:
-                    comments.extend(explorer._discover_comments_in_file(file, tags))
+
+                # Read all files asynchronously
+                read_file_calls = [LexicalExplorer._read_file_async(file) for file in files]
+                results = dict(zip(files, await asyncio.gather(*read_file_calls, return_exceptions=True)))
+                file_contents: Dict[str, str] = {
+                    file: content for file, content in results.items() if isinstance(content, str)
+                }
+
+                # Discover comments in files in parallel
+                with ProcessPoolExecutor(max_workers=4) as executor:
+                    tasks = [(file, content, tags) for file, content in file_contents.items()]
+                    discovered_comments = list(executor.map(explorer._discover_comments_in_file, *zip(*tasks)))
+
+                # Flatten list of lists of comments
+                for comment_list in discovered_comments:
+                    comments.extend(comment_list)
 
         return comments
+
+    @staticmethod
+    async def _read_file_async(filepath: str) -> str:
+        async with aiofiles.open(filepath, "r", encoding="utf-8") as file:
+            file_content = await file.read()
+        return file_content
 
     @staticmethod
     def _find_files_with_extensions(source_path: str, extensions: List[str]) -> Dict[str, List[str]]:
@@ -50,5 +74,5 @@ class LexicalExplorer(BaseExplorer):
 
         return found_files
 
-    def _discover_comments_in_file(self, filepath: str, tags: List[str]) -> List[Comment]:
+    def _discover_comments_in_file(self, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
