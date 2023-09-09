@@ -74,7 +74,8 @@ class LexicalExplorer(BaseExplorer):
 
         return found_files
 
-    def _discover_comments_in_file(self, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
+    @classmethod
+    def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
 
     @staticmethod

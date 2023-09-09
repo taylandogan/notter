@@ -13,30 +13,52 @@ NOTES_DIRNAME = "notes"
 INITIALIZED_FLAG = "initialized"
 DB_INITIALIZED_FLAG = "db_initialized"
 
-PYTHON_EXT = ".py"
-JAVASCRIPT_EXT = ".js"
-TYPESCRIPT_EXT = ".ts"
-C_EXT = ".c"
 CPP_EXT = ".cpp"
-HEADER_EXT = ".h"
-HEADER_CPP_EXT = ".hpp"
+C_EXT = ".c"
 C_SHARP_EXT = ".cs"
-JAVA_EXT = ".java"
-RUST_EXT = ".rs"
 GO_EXT = ".go"
+HASKELL_EXT = ".hs"
+HEADER_CPP_EXT = ".hpp"
+HEADER_EXT = ".h"
+JAVASCRIPT_EXT = ".js"
+JAVA_EXT = ".java"
+KOTLIN_EXT = ".kt"
+LUA_EXT = ".lua"
+PERL_EXT = ".pl"
+PHP_EXT = ".php"
+PYTHON_EXT = ".py"
+REACT_EXT = ".jsx"
+REACT_TS_EXT = ".tsx"
 RUBY_EXT = ".rb"
+RUST_EXT = ".rs"
+R_EXT = ".r"
+SCALA_EXT = ".scala"
+SWIFT_EXT = ".swift"
+TYPESCRIPT_EXT = ".ts"
+VUE_EXT = ".vue"
 
 SUPPORTED_EXTENSIONS = [
-    PYTHON_EXT,
-    JAVASCRIPT_EXT,
-    TYPESCRIPT_EXT,
-    C_EXT,
     CPP_EXT,
-    HEADER_EXT,
-    HEADER_CPP_EXT,
+    C_EXT,
     C_SHARP_EXT,
-    JAVA_EXT,
-    RUST_EXT,
     GO_EXT,
+    HASKELL_EXT,
+    HEADER_CPP_EXT,
+    HEADER_EXT,
+    JAVASCRIPT_EXT,
+    JAVA_EXT,
+    KOTLIN_EXT,
+    LUA_EXT,
+    PERL_EXT,
+    PHP_EXT,
+    PYTHON_EXT,
+    REACT_EXT,
+    REACT_TS_EXT,
     RUBY_EXT,
+    RUST_EXT,
+    R_EXT,
+    SCALA_EXT,
+    SWIFT_EXT,
+    TYPESCRIPT_EXT,
+    VUE_EXT,
 ]
