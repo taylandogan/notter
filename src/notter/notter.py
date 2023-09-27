@@ -21,7 +21,6 @@ class Notter:
         self.config[ncons.CONFIG_PATH] = str(path / ncons.CONFIG_FILENAME)
         self.config[ncons.SRC_PATH] = str(src_folder)
         self.config[ncons.PATH] = str(path)
-        self.config[ncons.NOTES_PATH] = str(path / ncons.NOTES_DIRNAME)
         self.init_notter_folders()
 
     def init_notter_folders(self) -> None:
