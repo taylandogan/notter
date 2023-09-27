@@ -35,12 +35,25 @@ class LexicalExplorer(BaseExplorer):
 
         for ext, files in files_per_ext.items():
             explorer_class = registry.get(ext)
-            if explorer_class:
-                explorer = explorer_class(self.notter)
 
-                # Read all files asynchronously
-                read_file_calls = [LexicalExplorer._read_file_async(file) for file in files]
-                results = dict(zip(files, await asyncio.gather(*read_file_calls, return_exceptions=True)))
+            # Skip if unrecognized file format
+            if not explorer_class:
+                continue
+
+            explorer = explorer_class(self.notter)
+
+            # Read and process files chunk by chunk
+            chunk_size = ncons.FILE_READ_CHUNK_SIZE
+            read_file_calls = [LexicalExplorer._read_file_async(file) for file in files]
+            for i in range(0, len(read_file_calls), chunk_size):
+                results = dict(
+                    zip(
+                        files,
+                        await asyncio.gather(
+                            *read_file_calls[i : i + chunk_size], return_exceptions=True  # noqa: E203
+                        ),
+                    )
+                )
                 file_contents: Dict[str, str] = {
                     file: content for file, content in results.items() if isinstance(content, str)
                 }
