@@ -79,6 +79,6 @@ class LexicalExplorer(BaseExplorer):
 
     @staticmethod
     def determine_note_type(text: str, tags: List[str]) -> NoteType:
-        text = text.lower()
+        text = text.lower().strip()
         tags = [tag.lower() for tag in tags]
-        return NoteType.TODO if any(tag in text for tag in tags) else NoteType.NOTE
+        return NoteType.TODO if any(text.startswith(tag) for tag in tags) else NoteType.NOTE
