@@ -24,14 +24,13 @@ class TestNotter:
         assert notter.config.get("config_path") == "mock/notter/.notter/config.json"
         assert notter.config.get("src_path") == "mock/notter/src"
         assert notter.config.get("path") == "mock/notter/.notter"
-        assert notter.config.get("notes_path") == "mock/notter/.notter/notes"
         notter.init_notter_folders.assert_called_once()
         m_open.assert_called_with("mock/notter/.notter/config.json", "w+")
 
     def test_notter_init_folders(self) -> None:
         notter = Notter()
         notter.set_config = MagicMock()
-        notter.config = {"path": "mock/notter/.notter", "notes_path": "mock/notter/.notter/notes"}
+        notter.config = {"path": "mock/notter/.notter"}
 
         with patch("os.mkdir") as mkdir_mock:
             notter.init_notter_folders()

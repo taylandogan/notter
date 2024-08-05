@@ -29,7 +29,6 @@ class Notter:
         else:
             click.secho(f"Creating Notter folders at location: {self.config[ncons.PATH]}", fg="yellow")
             Path(self.get_config(ncons.PATH)).mkdir(parents=True, exist_ok=True)
-            Path(self.get_config(ncons.NOTES_PATH)).mkdir(parents=True, exist_ok=True)
             self.set_config(ncons.INITIALIZED_FLAG, True)
 
     def load(self, src_folder: str) -> None:

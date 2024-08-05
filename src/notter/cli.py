@@ -1,7 +1,5 @@
 import asyncio
 import json
-import os
-import sys
 from importlib.metadata import version as pkg_version
 from pathlib import Path
 from typing import Optional, Tuple
@@ -23,17 +21,9 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 @click.group(invoke_without_command=True)
 @click.option("--init", nargs=2, type=str, help="Initialize Notter tool with a username & email.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
+@click.argument("src_path", type=click.Path(exists=True), nargs=1)
 @click.pass_context
-def cli(ctx: Context, init: Tuple[str, str], version: bool) -> None:
-    src_path = os.getenv(SRC_PATH_VAR)
-    if not src_path:
-        click.secho(
-            f"Could not find the source folder.\
-            Please export your source folder as the environment variable: `{SRC_PATH_VAR}`",
-            fg="red",
-        )
-        sys.exit(1)
-
+def cli(ctx: Context, init: Tuple[str, str], version: bool, src_path: str) -> None:
     # Initialize Notter instance
     notter = Notter()
 
@@ -41,15 +31,15 @@ def cli(ctx: Context, init: Tuple[str, str], version: bool) -> None:
         click.echo(f'{pkg_version("notter")}')
         return
 
-    if not init:
-        notter.load(src_path)
-    else:
+    if init:
         # TODO: Do not initialize if the Notter instance is already there
         username, email = init
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
         notter.set_config(ncons.USERNAME, username)
         notter.set_config(ncons.EMAIL, email)
+    else:
+        notter.load(src_path)
 
     controller = NoteController(notter)
     # Add a custom object to context so they are available for other commands

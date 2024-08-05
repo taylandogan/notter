@@ -4,7 +4,6 @@ CONFIG_PATH = "config_path"
 USERNAME = "username"
 EMAIL = "email"
 
-NOTES_PATH = "notes_path"
 NOTES_DB_FILENAME = "notes.db"
 
 CONFIG_FILENAME = "config.json"

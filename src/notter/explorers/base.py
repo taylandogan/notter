@@ -1,6 +1,5 @@
 import asyncio
 import os
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Dict, List
 
@@ -43,29 +42,16 @@ class LexicalExplorer(BaseExplorer):
             explorer = explorer_class(self.notter)
 
             # Read and process files chunk by chunk
-            chunk_size = ncons.FILE_READ_CHUNK_SIZE
             read_file_calls = [LexicalExplorer._read_file_async(file) for file in files]
-            for i in range(0, len(read_file_calls), chunk_size):
-                results = dict(
-                    zip(
-                        files,
-                        await asyncio.gather(
-                            *read_file_calls[i : i + chunk_size], return_exceptions=True  # noqa: E203
-                        ),
-                    )
-                )
-                file_contents: Dict[str, str] = {
-                    file: content for file, content in results.items() if isinstance(content, str)
-                }
+            results = dict(zip(files, await asyncio.gather(*read_file_calls, return_exceptions=True)))
+            file_contents: Dict[str, str] = {
+                file: content for file, content in results.items() if isinstance(content, str)
+            }
 
-                # Discover comments in files in parallel
-                with ProcessPoolExecutor(max_workers=4) as executor:
-                    tasks = [(file, content, tags) for file, content in file_contents.items()]
-                    discovered_comments = list(executor.map(explorer._discover_comments_in_file, *zip(*tasks)))
-
-                # Flatten list of lists of comments
-                for comment_list in discovered_comments:
-                    comments.extend(comment_list)
+            # Discover comments in files
+            for file, content in file_contents.items():
+                discovered_comments = explorer._discover_comments_in_file(file, content, tags)
+                comments.extend(discovered_comments)
 
         return comments
 
