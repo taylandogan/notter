@@ -1,3 +1,8 @@
+<div align="center">
+    <img src="media/notter.png" alt="logo" width="200"/>
+</div>
+
+
 # notter
 <!-- /// Github badges go here -->
 ![3.10](https://img.shields.io/github/actions/workflow/status/taylandogan/notter/tests.yml?branch=master&event=push&matrix.python-version=3.10&label=python3.10)
