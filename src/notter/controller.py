@@ -1,4 +1,6 @@
+import json
 import uuid
+from pathlib import Path
 from typing import List
 
 import notter.constants as ncons
@@ -16,6 +18,9 @@ class NoteController:
         self.repository = SQLiteRepository(self.notter)
         self.explorer = LexicalExplorer(self.notter)
 
+        notter_path = Path(self.notter.get_config(ncons.PATH))
+        self.export_path = str(notter_path / ncons.EXPORT_FILENAME)
+
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
         src_folder = self.notter.get_config(ncons.SRC_PATH)
         filepath = convert_to_local_path(filepath, src_folder)
@@ -29,6 +34,15 @@ class NoteController:
     def create(self, filepath: str, line: int, text: str, type: NoteType = NoteType.NOTE) -> None:
         note_with_content = self._create_note_with_content(filepath, line, text, type)
         self.repository.create(note_with_content)
+
+    def get_all(self) -> List[NoteWithContent]:
+        return self.repository.get_all()
+
+    def export(self) -> None:
+        todos = self.get_all()
+        todo_dicts = [todo.to_dict() for todo in todos]
+        with open(self.export_path, "w") as export_file:
+            json.dump(todo_dicts, export_file)
 
     def read(self, filepath: str, line: int) -> NoteWithContent:
         return self.repository.read(filepath, line)

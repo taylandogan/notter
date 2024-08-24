@@ -35,6 +35,19 @@ class NoteWithContent:
     def __str__(self) -> str:
         return f"{self.content.text} - {self.note.username} / {self.note.updated_at}"
 
+    def to_dict(self) -> dict:
+        return {
+            "id": self.note.id,
+            "username": self.note.username,
+            "email": self.note.email,
+            "filepath": self.note.filepath,
+            "line": self.note.line,
+            "type": self.note.type.value,
+            "created_at": self.note.created_at,
+            "updated_at": self.note.updated_at,
+            "content": self.content.text,
+        }
+
     # TODO: This is too ugly, find a better way to do this
     @staticmethod
     def from_db_row(row: tuple) -> "NoteWithContent":

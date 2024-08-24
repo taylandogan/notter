@@ -41,6 +41,9 @@ class SQLiteRepository(BaseRepository):
     def create(self, note_with_content: NoteWithContent) -> None:
         self.db_manager.insert(note_with_content)
 
+    def get_all(self) -> List[NoteWithContent]:
+        return self.db_manager.get_all()
+
     def read(self, filepath: str, line: int) -> NoteWithContent:
         return self.db_manager.get_by_filepath_and_line(filepath, line)
 

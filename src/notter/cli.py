@@ -172,3 +172,12 @@ def discover(ctx: Context) -> None:
         click.echo(json.dumps(comments, default=lambda o: o.__dict__))
     except NotterException as exc:
         click.secho(exc.message, fg="red")
+
+
+@cli.command()
+@pass_context
+def export(ctx: Context) -> None:
+    try:
+        ctx.obj.controller.export()
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")

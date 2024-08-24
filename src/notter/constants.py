@@ -5,6 +5,7 @@ USERNAME = "username"
 EMAIL = "email"
 
 NOTES_DB_FILENAME = "notes.db"
+EXPORT_FILENAME = "todos.json"
 
 CONFIG_FILENAME = "config.json"
 
