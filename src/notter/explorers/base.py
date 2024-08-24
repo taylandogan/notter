@@ -50,7 +50,7 @@ class LexicalExplorer(BaseExplorer):
 
             # Discover comments in files
             for file, content in file_contents.items():
-                discovered_comments = explorer._discover_comments_in_file(file, content, tags)
+                discovered_comments = explorer._discover_todos_in_file(file, content, tags)
                 comments.extend(discovered_comments)
 
         return comments
@@ -76,6 +76,11 @@ class LexicalExplorer(BaseExplorer):
     @classmethod
     def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
         raise NotImplementedError
+
+    @classmethod
+    def _discover_todos_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
+        comments: List[Comment] = cls._discover_comments_in_file(filepath, file_content, tags)
+        return [comment for comment in comments if comment.type == NoteType.TODO]
 
     @staticmethod
     def determine_note_type(text: str, tags: List[str]) -> NoteType:
