@@ -31,8 +31,11 @@ def cli(ctx: Context, init: Tuple[str, str], version: bool, src_path: str) -> No
         click.echo(f'{pkg_version("notter")}')
         return
 
-    if init:
-        # TODO: Do not initialize if the Notter instance is already there
+    # Try to load the notter instance if exists, otherwise init
+    full_path = Path(src_path).resolve()
+    already_installed = (full_path / ".notter").is_dir()
+
+    if init and not already_installed:
         username, email = init
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
