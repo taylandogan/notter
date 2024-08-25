@@ -1,7 +1,7 @@
 import json
 import uuid
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import notter.constants as ncons
 from notter.exceptions import NoteAlreadyExists
@@ -9,7 +9,6 @@ from notter.explorers.base import LexicalExplorer
 from notter.model import Comment, Content, Note, NoteType, NoteWithContent
 from notter.notter import Notter
 from notter.repository import SQLiteRepository
-from notter.utils import convert_to_local_path
 
 
 class NoteController:
@@ -22,8 +21,6 @@ class NoteController:
         self.export_path = str(notter_path / ncons.EXPORT_FILENAME)
 
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
-        src_folder = self.notter.get_config(ncons.SRC_PATH)
-        filepath = convert_to_local_path(filepath, src_folder)
         username = self.notter.get_config(ncons.USERNAME)
         email = self.notter.get_config(ncons.EMAIL)
         # TODO: Add input validation, max number of characters for each field
@@ -63,15 +60,36 @@ class NoteController:
     def delete(self, filepath: str, line: int) -> None:
         self.repository.delete(filepath, line)
 
-    async def discover(self, tags: List[str], save_as_notter_notes: bool = True) -> List[Comment]:
+    async def discover(self, tags: List[str], filepath: Optional[str] = None) -> List[Comment]:
+        existing_comments: List[NoteWithContent] = self.get_all()
+        existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
+
         comments: List[Comment] = await self.explorer.discover(tags)
-
-        if save_as_notter_notes:
-            for comment in comments:
-                try:
+        for comment in comments:
+            try:
+                if comment.location_id in existing_comments_locations:
+                    self.update(comment.filepath, comment.line, comment.text, comment.type)
+                else:
                     self.create(comment.filepath, comment.line, comment.text, comment.type)
-                except NoteAlreadyExists:
-                    continue
+            except NoteAlreadyExists:
+                continue
 
-        _ = self.repository.prune(comments)
+        _ = self.repository.prune(comments, filepath)
+        return comments
+
+    async def discover_single_file(self, filepath: str, tags: List[str]) -> List[Comment]:
+        existing_comments: List[NoteWithContent] = self.read_file(filepath)
+        existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
+
+        comments: List[Comment] = await self.explorer.discover_single_file(tags, filepath)
+        for comment in comments:
+            try:
+                if comment.location_id in existing_comments_locations:
+                    self.update(comment.filepath, comment.line, comment.text, comment.type)
+                else:
+                    self.create(comment.filepath, comment.line, comment.text, comment.type)
+            except NoteAlreadyExists:
+                continue
+
+        _ = self.repository.prune(comments, filepath)
         return comments

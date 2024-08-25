@@ -55,6 +55,18 @@ class LexicalExplorer(BaseExplorer):
 
         return comments
 
+    async def discover_single_file(self, tags: List[str], filepath: str) -> List[Comment]:
+        tags = [tag.lower() for tag in tags]
+
+        file_ext = os.path.splitext(filepath)[-1].lower()
+        explorer_class = registry.get(file_ext)
+        if not explorer_class:
+            return []
+
+        explorer = explorer_class(self.notter)
+        file_content = await LexicalExplorer._read_file_async(filepath)
+        return explorer._discover_todos_in_file(filepath, file_content, tags)
+
     @staticmethod
     async def _read_file_async(filepath: str) -> str:
         async with aiofiles.open(filepath, "r", encoding="utf-8") as file:

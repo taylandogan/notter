@@ -99,11 +99,10 @@ class TestSQLiteRepository:
 
         repository.db_manager.delete.assert_called_once_with("dummy_path", 5)
 
-    @patch("notter.utils.convert_to_local_path")
     @patch("notter.repository.SQLiteRepository.delete")
     @patch("notter.repository.DatabaseManager")
     def test_prune(
-        self, mock_db_manager: MagicMock, mock_delete: MagicMock, mock_convert_to_local_path: MagicMock
+        self, mock_db_manager: MagicMock, mock_delete: MagicMock
     ) -> None:
         notter_with_config = Notter()
         notter_with_config.configure(self.mock_src_folder)
@@ -111,7 +110,6 @@ class TestSQLiteRepository:
         repository.db_manager = mock_db_manager
 
         mock_delete.return_value = None
-        mock_convert_to_local_path = MagicMock(side_effect=lambda x: x)
 
         repository.db_manager.get_all.return_value = [
             NoteWithContent(
@@ -137,7 +135,7 @@ class TestSQLiteRepository:
             Comment("file1.py", "content2", 2, NoteType.TODO),
             Comment("file3.py", "content3", 1, NoteType.TODO),
         ]
-        items_to_prune = repository.prune(comments)
+        items_to_prune = repository.prune(comments, None)
 
         expected_calls = [call("file2.py", 1), call("file2.py", 2)]
         mock_delete.assert_has_calls(expected_calls, any_order=True)

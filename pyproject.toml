@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "notter"
-version = "0.2.3"
+version = "0.2.4"
 description = "A simple note taking tool for software projects."
 authors = [
     {name = "Taylan Dogan", email = "taylandogan.nl@gmail.com"},

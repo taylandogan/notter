@@ -1,11 +1,10 @@
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import notter.constants as ncons
 from notter.db_manager import DatabaseManager
 from notter.model import Comment, NoteWithContent
 from notter.notter import Notter
-from notter.utils import convert_to_local_path
 
 
 class BaseRepository:
@@ -62,20 +61,21 @@ class SQLiteRepository(BaseRepository):
     def delete(self, filepath: str, line: int) -> None:
         self.db_manager.delete(filepath, line)
 
-    def prune(self, comments: List[Comment]) -> List[str]:
+    def prune(self, comments: List[Comment], filepath: Optional[str]) -> List[str]:
         comments_set = set()
         for comment in comments:
-            filepath = convert_to_local_path(comment.filepath, self.notter.get_config(ncons.SRC_PATH))
-            comments_set.add(f"{filepath}:{comment.line}")
+            comments_set.add(f"{comment.filepath}:{comment.line}")
 
         entry_set = set()
-        entries: List[NoteWithContent] = self.db_manager.get_all()
+        entries: List[NoteWithContent] = (
+            self.db_manager.get_by_filepath(filepath) if filepath else self.db_manager.get_all()
+        )
         for entry in entries:
             entry_set.add(f"{entry.note.filepath}:{entry.note.line}")
 
         items_to_prune = list(entry_set.difference(comments_set))
         for item in items_to_prune:
-            filepath, line = item.split(":")
-            self.delete(filepath, int(line))
+            item_filepath, line = item.split(":")
+            self.delete(item_filepath, int(line))
 
         return items_to_prune

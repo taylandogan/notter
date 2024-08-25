@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="notter",
-    version="0.2.3",
+    version="0.2.4",
     description="A simple note taking tool for software projects.",
     author="Taylan Dogan",
     author_email="taylandogan.nl@gmail.com",

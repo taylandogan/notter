@@ -35,6 +35,10 @@ class NoteWithContent:
     def __str__(self) -> str:
         return f"{self.content.text} - {self.note.username} / {self.note.updated_at}"
 
+    @property
+    def location_id(self) -> str:
+        return f"{self.note.filepath}:{self.note.line}"
+
     def to_dict(self) -> dict:
         return {
             "id": self.note.id,
@@ -88,3 +92,7 @@ class Comment:
 
     def __str__(self) -> str:
         return f"{self.filepath}:{self.line} - {self.text}"
+
+    @property
+    def location_id(self) -> str:
+        return f"{self.filepath}:{self.line}"

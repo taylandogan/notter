@@ -178,6 +178,20 @@ def discover(ctx: Context) -> None:
 
 
 @cli.command()
+@click.argument("filepath", type=str)
+@pass_context
+def discover_file(ctx: Context, filepath: str) -> None:
+    try:
+        # TODO: Retrieve tags from user
+        tags = ["TODO", "FIXME"]
+        loop = asyncio.get_event_loop()
+        comments = loop.run_until_complete(ctx.obj.controller.discover_single_file(filepath, tags))
+        click.echo(json.dumps(comments, default=lambda o: o.__dict__))
+    except NotterException as exc:
+        click.secho(exc.message, fg="red")
+
+
+@cli.command()
 @pass_context
 def export(ctx: Context) -> None:
     try:

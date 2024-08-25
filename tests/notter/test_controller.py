@@ -13,7 +13,7 @@ class TestNoteController:
         file_path = Path(note_controller.notter.get_config(ncons.SRC_PATH)) / "path/to/file.py"
         note_with_content = note_controller._create_note_with_content(str(file_path), 1, "This is a test", "NOTE")
 
-        assert note_with_content.note.filepath == "path/to/file.py"
+        assert note_with_content.note.filepath == str(file_path)
         assert note_with_content.note.line == 1
         assert note_with_content.content.text == "This is a test"
         assert note_with_content.note.type == "NOTE"
