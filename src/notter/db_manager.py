@@ -68,6 +68,9 @@ class DatabaseManager:
         existing: NoteWithContent = self.get_by_filepath_and_line(filepath, line)
         self.run_statement(sql_statements.DELETE_NOTE, (existing.note.id,))
 
+    def delete_all_in_file(self, filepath: str) -> None:
+        self.run_statement(sql_statements.DELETE_NOTES_IN_FILE, (filepath,))
+
     def get_all(self) -> List[NoteWithContent]:
         cursor = self.run_statement(sql_statements.GET_NOTES, None, True)
         return [NoteWithContent.from_db_row(row) for row in cursor]

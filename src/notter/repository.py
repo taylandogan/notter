@@ -61,6 +61,9 @@ class SQLiteRepository(BaseRepository):
     def delete(self, filepath: str, line: int) -> None:
         self.db_manager.delete(filepath, line)
 
+    def delete_all_in_file(self, filepath: str) -> None:
+        self.db_manager.delete_all_in_file(filepath)
+
     def prune(self, comments: List[Comment], filepath: Optional[str]) -> List[str]:
         comments_set = set()
         for comment in comments:

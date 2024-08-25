@@ -60,6 +60,9 @@ class NoteController:
     def delete(self, filepath: str, line: int) -> None:
         self.repository.delete(filepath, line)
 
+    def delete_all_in_file(self, filepath: str) -> None:
+        self.repository.delete_all_in_file(filepath)
+
     async def discover(self, tags: List[str], filepath: Optional[str] = None) -> List[Comment]:
         existing_comments: List[NoteWithContent] = self.get_all()
         existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
@@ -81,7 +84,12 @@ class NoteController:
         existing_comments: List[NoteWithContent] = self.read_file(filepath)
         existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
 
-        comments: List[Comment] = await self.explorer.discover_single_file(tags, filepath)
+        try:
+            comments: List[Comment] = await self.explorer.discover_single_file(tags, filepath)
+        except FileNotFoundError:
+            self.delete_all_in_file(filepath)
+            return []
+
         for comment in comments:
             try:
                 if comment.location_id in existing_comments_locations:

@@ -40,6 +40,7 @@ UPDATE notes SET
 """
 
 DELETE_NOTE = "DELETE FROM notes WHERE id = ?"
+DELETE_NOTES_IN_FILE = "DELETE FROM notes WHERE filepath = ?"
 GET_NOTE = "SELECT * FROM notes WHERE id = ?"
 GET_NOTES = "SELECT * FROM notes"
 GET_NOTE_BY_FILEPATH = "SELECT * FROM notes WHERE filepath = ?"
