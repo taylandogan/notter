@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from notter import sql_statements
 from notter.exceptions import NoteNotFound
@@ -26,7 +26,7 @@ class DatabaseManager:
         self.db_name = db_name
         self.conn = ConnectionManager(db_name)
 
-    def run_statement(self, statement: str, values: Optional[tuple] = None, many: bool = False) -> sqlite3.Cursor:
+    def run_statement(self, statement: str, values: Optional[tuple] = None, many: bool = False) -> List[Any] | Any:
         cursor, result = None, None
 
         with self.conn as conn:
@@ -53,8 +53,6 @@ class DatabaseManager:
 
     def update(self, filepath: str, line: int, update: NoteWithContent) -> None:
         existing: NoteWithContent = self.get_by_filepath_and_line(filepath, line)
-        existing.note.username = update.note.username
-        existing.note.email = update.note.email
         existing.note.filepath = update.note.filepath
         existing.note.line = update.note.line
         existing.note.type = update.note.type
@@ -87,10 +85,6 @@ class DatabaseManager:
 
     def get_by_type(self, type: str) -> List[NoteWithContent]:
         cursor = self.run_statement(sql_statements.GET_NOTE_BY_TYPE, (type,), True)
-        return [NoteWithContent.from_db_row(row) for row in cursor]
-
-    def get_by_username(self, username: str) -> List[NoteWithContent]:
-        cursor = self.run_statement(sql_statements.GET_NOTE_BY_USERNAME, (username,), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]
 
     def search(self, content: str) -> List[NoteWithContent]:

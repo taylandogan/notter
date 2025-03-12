@@ -19,7 +19,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(invoke_without_command=True)
-@click.option("--init", nargs=2, type=str, help="Initialize Notter tool with a username & email.")
+@click.option("--init", nargs=2, type=str, help="Initialize the Notter tool.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
 @click.argument("src_path", type=click.Path(exists=True), nargs=1)
 @click.pass_context
@@ -36,11 +36,8 @@ def cli(ctx: Context, init: Tuple[str, str], version: bool, src_path: str) -> No
     already_installed = (full_path / ".notter").is_dir()
 
     if init and not already_installed:
-        username, email = init
         click.secho(f"Initializing Notter with `{src_path}` as source folder.", fg="yellow")
         notter.configure(Path(src_path).resolve())
-        notter.set_config(ncons.USERNAME, username)
-        notter.set_config(ncons.EMAIL, email)
     else:
         notter.load(src_path)
 
@@ -111,17 +108,6 @@ def read(ctx: Context, filepath: str, line: int) -> None:
 def read_file(ctx: Context, filepath: str) -> None:
     try:
         note = ctx.obj.controller.read_file(filepath)
-        click.echo(note)
-    except NotterException as exc:
-        click.secho(exc.message, fg="red")
-
-
-@cli.command()
-@click.argument("username", type=str)
-@pass_context
-def read_user_notes(ctx: Context, username: str) -> None:
-    try:
-        note = ctx.obj.controller.read_user_notes(username)
         click.echo(note)
     except NotterException as exc:
         click.secho(exc.message, fg="red")

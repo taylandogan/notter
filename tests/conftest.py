@@ -18,8 +18,6 @@ def content() -> Content:
 def note() -> Note:
     return Note(
         id="note_id",
-        username="pikachu",
-        email="pikachu@test.com",
         filepath="path/to/file",
         line=1,
         type=NoteType.TODO,

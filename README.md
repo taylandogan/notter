@@ -55,9 +55,9 @@ my_project
 
 ### Initialize
 
-To initialize Notter in a codebase, after exporting `SRC_PATH`, run the command below. You also provide a username and email so that Notter can keep track of who created which todo, etc. **Don't worry though! Everything is local, you are not creating an account or signing in anywhere.** Think of it something like a git username/email config. In fact, you might use your git credentials for Notter as well. Note that, while `idx_notes.json` is meant to be tracked by your version control software, `config.json` includes user-specific data, hence it should not be tracked. Please add it to `.gitignore` if you are using git.
+To initialize Notter in a codebase, after exporting `SRC_PATH`, run the command below. Note that, while `idx_notes.json` is meant to be tracked by your version control software, `config.json` includes user-specific data, hence it should not be tracked. Please add it to `.gitignore` if you are using git.
 ```sh
-$ notter --init [USERNAME] [EMAIL]
+$ notter --init
 ```
 
 ### Discover
@@ -112,7 +112,6 @@ Both comments and todos are reffered as "notes".
 - [ ] Multi-language support
 - [ ] Export notes
 - [ ] Archive notes
-- [ ] Change username/email
 
 See the [open issues](https://github.com/taylandogan/notter/issues) for a full list of proposed features (and known issues).
 <!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->

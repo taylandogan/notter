@@ -1,8 +1,6 @@
 PATH = "path"
 SRC_PATH = "src_path"
 CONFIG_PATH = "config_path"
-USERNAME = "username"
-EMAIL = "email"
 
 NOTES_DB_FILENAME = "notes.db"
 EXPORT_FILENAME = "todos.json"

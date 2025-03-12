@@ -39,12 +39,6 @@ class TestNoteController:
 
         note_controller.repository.read_file.assert_called_once_with("path/to/file.py")
 
-    def test_read_user_notes(self, note_controller: NoteController) -> None:
-        note_controller.repository = MagicMock()
-        note_controller.read_user_notes("pikachu")
-
-        note_controller.repository.read_user_notes.assert_called_once_with("pikachu")
-
     def test_search_note_with_content(self, note_controller: NoteController) -> None:
         note_controller.repository = MagicMock()
         note_controller.search_note_with_content("test")

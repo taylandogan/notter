@@ -13,8 +13,6 @@ class NoteType(str, Enum):
 @dataclass
 class Note:
     id: str
-    username: str
-    email: str
     filepath: str
     line: int
     type: NoteType = NoteType.NOTE
@@ -33,7 +31,7 @@ class NoteWithContent:
     content: Content
 
     def __str__(self) -> str:
-        return f"{self.content.text} - {self.note.username} / {self.note.updated_at}"
+        return f"{self.content.text} / {self.note.updated_at}"
 
     @property
     def location_id(self) -> str:
@@ -42,8 +40,6 @@ class NoteWithContent:
     def to_dict(self) -> dict:
         return {
             "id": self.note.id,
-            "username": self.note.username,
-            "email": self.note.email,
             "filepath": self.note.filepath,
             "line": self.note.line,
             "type": self.note.type.value,
@@ -57,8 +53,6 @@ class NoteWithContent:
     def from_db_row(row: tuple) -> "NoteWithContent":
         note = Note(
             id=row[0],
-            username=row[1],
-            email=row[2],
             filepath=row[3],
             line=row[4],
             type=NoteType(row[5]),
@@ -71,8 +65,6 @@ class NoteWithContent:
     def to_db_row(self) -> tuple:
         return (
             self.note.id,
-            self.note.username,
-            self.note.email,
             self.note.filepath,
             self.note.line,
             self.note.type.value,

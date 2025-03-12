@@ -49,9 +49,6 @@ class SQLiteRepository(BaseRepository):
     def read_file(self, filepath: str) -> List[NoteWithContent]:
         return self.db_manager.get_by_filepath(filepath)
 
-    def read_user_notes(self, username: str) -> List[NoteWithContent]:
-        return self.db_manager.get_by_username(username)
-
     def search(self, content: str) -> List[NoteWithContent]:
         return self.db_manager.search(content)
 

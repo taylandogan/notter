@@ -21,10 +21,8 @@ class NoteController:
         self.export_path = str(notter_path / ncons.EXPORT_FILENAME)
 
     def _create_note_with_content(self, filepath: str, line: int, text: str, type: NoteType) -> NoteWithContent:
-        username = self.notter.get_config(ncons.USERNAME)
-        email = self.notter.get_config(ncons.EMAIL)
         # TODO: Add input validation, max number of characters for each field
-        note = Note(str(uuid.uuid4()), username, email, filepath, line, type)
+        note = Note(str(uuid.uuid4()), filepath, line, type)
         content = Content(text)
         return NoteWithContent(note, content)
 
@@ -46,9 +44,6 @@ class NoteController:
 
     def read_file(self, filepath: str) -> List[NoteWithContent]:
         return self.repository.read_file(filepath)
-
-    def read_user_notes(self, username: str) -> List[NoteWithContent]:
-        return self.repository.read_user_notes(username)
 
     def search_note_with_content(self, content: str) -> List[NoteWithContent]:
         return self.repository.search(content)
