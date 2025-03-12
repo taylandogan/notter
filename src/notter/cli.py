@@ -19,11 +19,11 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(invoke_without_command=True)
-@click.option("--init", nargs=2, type=str, help="Initialize the Notter tool.")
+@click.option("--init", is_flag=True, help="Initialize Notter tool.")
 @click.option("--version", is_flag=True, help="Print Notter version.")
 @click.argument("src_path", type=click.Path(exists=True), nargs=1)
 @click.pass_context
-def cli(ctx: Context, init: Tuple[str, str], version: bool, src_path: str) -> None:
+def cli(ctx: Context, init: bool, version: bool, src_path: str) -> None:
     # Initialize Notter instance
     notter = Notter()
 

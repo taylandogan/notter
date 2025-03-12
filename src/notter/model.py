@@ -53,13 +53,13 @@ class NoteWithContent:
     def from_db_row(row: tuple) -> "NoteWithContent":
         note = Note(
             id=row[0],
-            filepath=row[3],
-            line=row[4],
-            type=NoteType(row[5]),
-            created_at=row[6],
-            updated_at=row[7],
+            filepath=row[1],
+            line=row[2],
+            type=NoteType(row[3]),
+            created_at=row[4],
+            updated_at=row[5],
         )
-        content = Content(text=row[8])
+        content = Content(text=row[6])
         return NoteWithContent(note, content)
 
     def to_db_row(self) -> tuple:
