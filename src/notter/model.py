@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Optional
 
 
 class NoteType(str, Enum):
@@ -16,8 +15,8 @@ class Note:
     filepath: str
     line: int
     type: NoteType = NoteType.NOTE
-    created_at: Optional[str] = datetime.now().isoformat()
-    updated_at: Optional[str] = datetime.now().isoformat()
+    created_at: str | None = datetime.now().isoformat()
+    updated_at: str | None = datetime.now().isoformat()
 
 
 @dataclass

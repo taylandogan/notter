@@ -25,15 +25,12 @@ clean:
 
 .PHONY: format
 format: $(VENV_DEV)
-	isort $(PACKAGE_LOC)
-	black $(PACKAGE_LOC)
+	ruff format $(PACKAGE_LOC)
 
 .PHONY: lint
 lint: format
-	black --diff --check $(PACKAGE_LOC)
-	flake8 $(PACKAGE_LOC)
+	ruff check $(PACKAGE_LOC)
 	mypy $(PACKAGE_LOC)
-	isort --diff --check $(PACKAGE_LOC)
 
 .PHONY: unittests
 unittests: venv_dev

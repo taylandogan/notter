@@ -2,7 +2,6 @@ import asyncio
 import json
 from importlib.metadata import version as pkg_version
 from pathlib import Path
-from typing import Optional, Tuple
 
 import click
 from click import Context, pass_context
@@ -28,7 +27,7 @@ def cli(ctx: Context, init: bool, version: bool, src_path: str) -> None:
     notter = Notter()
 
     if version:
-        click.echo(f'{pkg_version("notter")}')
+        click.echo(f"{pkg_version('notter')}")
         return
 
     # Try to load the notter instance if exists, otherwise init
@@ -52,7 +51,7 @@ def cli(ctx: Context, init: bool, version: bool, src_path: str) -> None:
 @click.option("--set", "setc", nargs=2, type=str, help="set a config with a key-value pair")
 @click.option("--all", "allc", is_flag=True, help="show all the config")
 @pass_context
-def config(ctx: Context, get: Optional[str], setc: Optional[Tuple[str, str]], allc: bool) -> None:
+def config(ctx: Context, get: str | None, setc: tuple[str, str] | None, allc: bool) -> None:
     """Configure Notter configuration."""
     notter = ctx.obj.notter
     if get:

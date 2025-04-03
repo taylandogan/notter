@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Dict
+from typing import Any
 
 import click
 
@@ -11,7 +11,7 @@ from notter.utils import load_config, persist_config_after
 
 class Notter:
     def __init__(self) -> None:
-        self.config: Dict[str, Any] = {}
+        self.config: dict[str, Any] = {}
         self.config[ncons.INITIALIZED_FLAG] = False
         self.config[ncons.DB_INITIALIZED_FLAG] = False
 

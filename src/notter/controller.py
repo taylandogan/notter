@@ -1,7 +1,6 @@
 import json
 import uuid
 from pathlib import Path
-from typing import List, Optional
 
 import notter.constants as ncons
 from notter.exceptions import NoteAlreadyExists
@@ -30,7 +29,7 @@ class NoteController:
         note_with_content = self._create_note_with_content(filepath, line, text, type)
         self.repository.create(note_with_content)
 
-    def get_all(self) -> List[NoteWithContent]:
+    def get_all(self) -> list[NoteWithContent]:
         return self.repository.get_all()
 
     def export(self) -> None:
@@ -42,10 +41,10 @@ class NoteController:
     def read(self, filepath: str, line: int) -> NoteWithContent:
         return self.repository.read(filepath, line)
 
-    def read_file(self, filepath: str) -> List[NoteWithContent]:
+    def read_file(self, filepath: str) -> list[NoteWithContent]:
         return self.repository.read_file(filepath)
 
-    def search_note_with_content(self, content: str) -> List[NoteWithContent]:
+    def search_note_with_content(self, content: str) -> list[NoteWithContent]:
         return self.repository.search(content)
 
     def update(self, filepath: str, line: int, text: str, type: NoteType = NoteType.NOTE) -> None:
@@ -58,11 +57,11 @@ class NoteController:
     def delete_all_in_file(self, filepath: str) -> None:
         self.repository.delete_all_in_file(filepath)
 
-    async def discover(self, tags: List[str], filepath: Optional[str] = None) -> List[Comment]:
-        existing_comments: List[NoteWithContent] = self.get_all()
-        existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
+    async def discover(self, tags: list[str], filepath: str | None = None) -> list[Comment]:
+        existing_comments: list[NoteWithContent] = self.get_all()
+        existing_comments_locations: list[str] = [comment.location_id for comment in existing_comments]
 
-        comments: List[Comment] = await self.explorer.discover(tags)
+        comments: list[Comment] = await self.explorer.discover(tags)
         for comment in comments:
             try:
                 if comment.location_id in existing_comments_locations:
@@ -75,12 +74,12 @@ class NoteController:
         _ = self.repository.prune(comments, filepath)
         return comments
 
-    async def discover_single_file(self, filepath: str, tags: List[str]) -> List[Comment]:
-        existing_comments: List[NoteWithContent] = self.read_file(filepath)
-        existing_comments_locations: List[str] = [comment.location_id for comment in existing_comments]
+    async def discover_single_file(self, filepath: str, tags: list[str]) -> list[Comment]:
+        existing_comments: list[NoteWithContent] = self.read_file(filepath)
+        existing_comments_locations: list[str] = [comment.location_id for comment in existing_comments]
 
         try:
-            comments: List[Comment] = await self.explorer.discover_single_file(tags, filepath)
+            comments: list[Comment] = await self.explorer.discover_single_file(tags, filepath)
         except FileNotFoundError:
             self.delete_all_in_file(filepath)
             return []

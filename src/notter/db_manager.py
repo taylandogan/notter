@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any
 
 from notter import sql_statements
 from notter.exceptions import NoteNotFound
@@ -26,7 +26,7 @@ class DatabaseManager:
         self.db_name = db_name
         self.conn = ConnectionManager(db_name)
 
-    def run_statement(self, statement: str, values: Optional[tuple] = None, many: bool = False) -> List[Any] | Any:
+    def run_statement(self, statement: str, values: tuple | None = None, many: bool = False) -> list[Any] | Any:
         cursor, result = None, None
 
         with self.conn as conn:
@@ -69,11 +69,11 @@ class DatabaseManager:
     def delete_all_in_file(self, filepath: str) -> None:
         self.run_statement(sql_statements.DELETE_NOTES_IN_FILE, (filepath,))
 
-    def get_all(self) -> List[NoteWithContent]:
+    def get_all(self) -> list[NoteWithContent]:
         cursor = self.run_statement(sql_statements.GET_NOTES, None, True)
         return [NoteWithContent.from_db_row(row) for row in cursor]
 
-    def get_by_filepath(self, filepath: str) -> List[NoteWithContent]:
+    def get_by_filepath(self, filepath: str) -> list[NoteWithContent]:
         cursor = self.run_statement(sql_statements.GET_NOTE_BY_FILEPATH, (filepath,), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]
 
@@ -83,10 +83,10 @@ class DatabaseManager:
             raise NoteNotFound
         return NoteWithContent.from_db_row(cursor)  # type: ignore [arg-type]
 
-    def get_by_type(self, type: str) -> List[NoteWithContent]:
+    def get_by_type(self, type: str) -> list[NoteWithContent]:
         cursor = self.run_statement(sql_statements.GET_NOTE_BY_TYPE, (type,), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]
 
-    def search(self, content: str) -> List[NoteWithContent]:
+    def search(self, content: str) -> list[NoteWithContent]:
         cursor = self.run_statement(sql_statements.SEARCH_NOTES_WITH_CONTENT, (f"%{content}%",), True)
         return [NoteWithContent.from_db_row(row) for row in cursor]

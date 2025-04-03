@@ -1,7 +1,6 @@
 import asyncio
 import os
 from pathlib import Path
-from typing import Dict, List
 
 import aiofiles
 
@@ -15,7 +14,7 @@ class BaseExplorer:
     def __init__(self, notter: Notter):
         raise NotImplementedError
 
-    async def discover(self, tags: List[str]) -> List[Comment]:
+    async def discover(self, tags: list[str]) -> list[Comment]:
         raise NotImplementedError
 
 
@@ -24,7 +23,7 @@ class LexicalExplorer(BaseExplorer):
         self.notter = notter
         self.source_path = notter.get_config(ncons.SRC_PATH)
 
-    async def discover(self, tags: List[str]) -> List[Comment]:
+    async def discover(self, tags: list[str]) -> list[Comment]:
         comments = []
         tags = [tag.lower() for tag in tags]
 
@@ -43,8 +42,8 @@ class LexicalExplorer(BaseExplorer):
 
             # Read and process files chunk by chunk
             read_file_calls = [LexicalExplorer._read_file_async(file) for file in files]
-            results = dict(zip(files, await asyncio.gather(*read_file_calls, return_exceptions=True)))
-            file_contents: Dict[str, str] = {
+            results = dict(zip(files, await asyncio.gather(*read_file_calls, return_exceptions=True), strict=False))
+            file_contents: dict[str, str] = {
                 file: content for file, content in results.items() if isinstance(content, str)
             }
 
@@ -55,7 +54,7 @@ class LexicalExplorer(BaseExplorer):
 
         return comments
 
-    async def discover_single_file(self, tags: List[str], filepath: str) -> List[Comment]:
+    async def discover_single_file(self, tags: list[str], filepath: str) -> list[Comment]:
         tags = [tag.lower() for tag in tags]
 
         file_ext = os.path.splitext(filepath)[-1].lower()
@@ -69,13 +68,13 @@ class LexicalExplorer(BaseExplorer):
 
     @staticmethod
     async def _read_file_async(filepath: str) -> str:
-        async with aiofiles.open(filepath, "r", encoding="utf-8") as file:
+        async with aiofiles.open(filepath, encoding="utf-8") as file:
             file_content = await file.read()
         return file_content
 
     @staticmethod
-    def _find_files_with_extensions(source_path: str, extensions: List[str]) -> Dict[str, List[str]]:
-        found_files: Dict[str, List[str]] = {ext: [] for ext in extensions}
+    def _find_files_with_extensions(source_path: str, extensions: list[str]) -> dict[str, list[str]]:
+        found_files: dict[str, list[str]] = {ext: [] for ext in extensions}
 
         for root, dirs, files in os.walk(source_path):
             for file in files:
@@ -86,16 +85,16 @@ class LexicalExplorer(BaseExplorer):
         return found_files
 
     @classmethod
-    def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
+    def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: list[str]) -> list[Comment]:
         raise NotImplementedError
 
     @classmethod
-    def _discover_todos_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
-        comments: List[Comment] = cls._discover_comments_in_file(filepath, file_content, tags)
+    def _discover_todos_in_file(cls, filepath: str, file_content: str, tags: list[str]) -> list[Comment]:
+        comments: list[Comment] = cls._discover_comments_in_file(filepath, file_content, tags)
         return [comment for comment in comments if comment.type == NoteType.TODO]
 
     @staticmethod
-    def determine_note_type(text: str, tags: List[str]) -> NoteType:
+    def determine_note_type(text: str, tags: list[str]) -> NoteType:
         text = text.lower().strip()
         tags = [tag.lower() for tag in tags]
         return NoteType.TODO if any(tag in text for tag in tags) else NoteType.NOTE

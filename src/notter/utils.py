@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 import click
 
@@ -12,10 +12,10 @@ class CustomEncoder(json.JSONEncoder):
         return o.__dict__
 
 
-def load_config(config_file: str) -> Optional[Dict[str, Any]]:
+def load_config(config_file: str) -> dict[str, Any] | None:
     config_data = None
     try:
-        with open(config_file, "r") as file:
+        with open(config_file) as file:
             config_data = json.loads(file.read())
     except FileNotFoundError:
         click.secho(f"Could not load Notter config from: {config_file}", fg="red")

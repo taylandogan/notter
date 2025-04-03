@@ -1,6 +1,5 @@
 import io
 import tokenize
-from typing import List
 
 from notter.constants import PYTHON_EXT
 from notter.explorers.base import LexicalExplorer
@@ -11,8 +10,8 @@ from notter.model import Comment, NoteType
 @register_explorer(PYTHON_EXT)
 class PythonExplorer(LexicalExplorer):
     @classmethod
-    def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: List[str]) -> List[Comment]:
-        comments: List[Comment] = []
+    def _discover_comments_in_file(cls, filepath: str, file_content: str, tags: list[str]) -> list[Comment]:
+        comments: list[Comment] = []
 
         tokens = tokenize.tokenize(io.BytesIO(file_content.encode()).readline)
         for token_type, token_content, token_start, _, _ in tokens:

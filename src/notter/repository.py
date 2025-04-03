@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List, Optional
 
 import notter.constants as ncons
 from notter.db_manager import DatabaseManager
@@ -40,16 +39,16 @@ class SQLiteRepository(BaseRepository):
     def create(self, note_with_content: NoteWithContent) -> None:
         self.db_manager.insert(note_with_content)
 
-    def get_all(self) -> List[NoteWithContent]:
+    def get_all(self) -> list[NoteWithContent]:
         return self.db_manager.get_all()
 
     def read(self, filepath: str, line: int) -> NoteWithContent:
         return self.db_manager.get_by_filepath_and_line(filepath, line)
 
-    def read_file(self, filepath: str) -> List[NoteWithContent]:
+    def read_file(self, filepath: str) -> list[NoteWithContent]:
         return self.db_manager.get_by_filepath(filepath)
 
-    def search(self, content: str) -> List[NoteWithContent]:
+    def search(self, content: str) -> list[NoteWithContent]:
         return self.db_manager.search(content)
 
     def update(self, filepath: str, line: int, note_with_content: NoteWithContent) -> None:
@@ -61,13 +60,13 @@ class SQLiteRepository(BaseRepository):
     def delete_all_in_file(self, filepath: str) -> None:
         self.db_manager.delete_all_in_file(filepath)
 
-    def prune(self, comments: List[Comment], filepath: Optional[str]) -> List[str]:
+    def prune(self, comments: list[Comment], filepath: str | None) -> list[str]:
         comments_set = set()
         for comment in comments:
             comments_set.add(f"{comment.filepath}:{comment.line}")
 
         entry_set = set()
-        entries: List[NoteWithContent] = (
+        entries: list[NoteWithContent] = (
             self.db_manager.get_by_filepath(filepath) if filepath else self.db_manager.get_all()
         )
         for entry in entries:
