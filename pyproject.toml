@@ -11,7 +11,7 @@ authors = [
 ]
 license = {file = "LICENSE"}
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 keywords = ["notes", "todos", "tracking", "index"]
 
 # Requirements
@@ -27,7 +27,7 @@ notter = "notter.cli:cli"
 
 [tool.ruff]
 line-length = 120
-target-version = "py310"
+target-version = "py312"
 src = ["src", "tests"]
 fix-only = true
 
@@ -41,6 +41,7 @@ force-single-line = false
 known-first-party = ["notter"]
 order-by-type = true
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
 [tool.coverage.paths]
 source = ["src"]
 
